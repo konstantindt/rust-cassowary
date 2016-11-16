@@ -1,0 +1,6 @@
+[package]
+name = "cassowary"
+version = "0.1.0"
+authors = ["Konstantin Terziev <kd.terziev@gmail.com>"]
+
+[dependencies]
