@@ -1,7 +1,7 @@
 #[derive(PartialEq, Debug)]
 pub enum AbstVar {
     Variable { name: String, coefficient: f64 },
-    Constant { name: String, value: f64 }
+    Constant { name: String, value: f64 },
 }
 
 impl AbstVar {
@@ -35,9 +35,15 @@ impl AbstVar {
 }
 
 pub fn new_var(n: &str, c: f64) -> AbstVar {
-    AbstVar::Variable { name: n.to_string(), coefficient: c }
+    AbstVar::Variable {
+        name: n.to_string(),
+        coefficient: c,
+    }
 }
 
 pub fn new_const(n: &str, v: f64) -> AbstVar {
-    AbstVar::Constant { name: n.to_string(), value: v }
+    AbstVar::Constant {
+        name: n.to_string(),
+        value: v,
+    }
 }
