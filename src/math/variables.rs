@@ -25,6 +25,13 @@ impl AbstVar {
             _ => panic!("This variant does not support this method call."),
         }
     }
+
+    pub fn set_coefficient(&mut self, c: f64) {
+        match self {
+            &mut AbstVar::Variable { ref name, ref mut coefficient } => *coefficient = c,
+            _ => panic!("This variant does not support this method call."),
+        }
+    }
 }
 
 pub fn new_var(n: &str, c: f64) -> AbstVar {

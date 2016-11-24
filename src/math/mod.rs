@@ -4,6 +4,7 @@ pub mod expressions;
 
 #[cfg(test)]
 mod tests {
+    use std::cell::RefCell;
     use math::variables::{AbstVar, new_var, new_const};
     use math::relationships::Relationship;
     use math::expressions::Expression;
@@ -18,6 +19,16 @@ mod tests {
                    v);
         assert_eq!("x", v.name());
         assert_eq!(2.0, v.coefficient());
+    }
+
+    #[test]
+    fn can_set_coefficient() {
+        let v_state: RefCell<AbstVar> = RefCell::new(new_var("x", 2.0));
+        {
+            let mut v = v_state.borrow_mut();
+            v.set_coefficient(3.0);
+        }
+        assert_eq!(3.0, v_state.borrow().coefficient());
     }
 
     #[test]
