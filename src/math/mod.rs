@@ -1,10 +1,12 @@
 pub mod variables;
 pub mod relationships;
+pub mod expressions;
 
 #[cfg(test)]
 mod tests {
     use math::variables::{AbstVar, new_var, new_const};
     use math::relationships::Relationship;
+    use math::expressions::Expression;
 
     #[test]
     fn can_create_variables() {
@@ -38,5 +40,22 @@ mod tests {
         assert_eq!(Relationship::LEQ, r);
         let r: Relationship = Relationship::GEQ;
         assert_eq!(Relationship::GEQ, r);
+    }
+
+    #[test]
+    fn can_create_expressions() {
+        let e: Expression =
+            Expression::new(vec![new_var("Z", 1.0)],
+                            Relationship::EQ,
+                            vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
+        assert_eq!("Z", e.lhs()[0].name());
+        assert_eq!(1.0, e.lhs()[0].coefficient());
+        assert_eq!(Relationship::EQ, *e.rel());
+        assert_eq!("x", e.rhs()[0].name());
+        assert_eq!(2.0, e.rhs()[0].coefficient());
+        assert_eq!("y", e.rhs()[1].name());
+        assert_eq!(3.0, e.rhs()[1].coefficient());
+        assert_eq!("bonus", e.rhs()[2].name());
+        assert_eq!(1000.0, e.rhs()[2].value());
     }
 }
