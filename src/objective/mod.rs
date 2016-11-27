@@ -1,13 +1,17 @@
-pub mod functions;
 pub mod problems;
+pub mod functions;
+pub mod constraints;
 
 #[cfg(test)]
 mod tests {
+    use std::cell::RefCell;
     use math::variables::{AbstVar, new_var, new_const};
     use math::relationships::Relationship;
     use math::expressions::Expression;
     use objective::problems::ProblemType;
     use objective::functions::Function;
+    use objective::constraints::Constraint;
+    use objective::constraints::SystemOfConstraints;
 
     #[test]
     fn can_create_problem_types() {
@@ -34,5 +38,62 @@ mod tests {
         assert_eq!(3.0, f.exp().rhs()[1].coefficient());
         assert_eq!("bonus", f.exp().rhs()[2].name());
         assert_eq!(1000.0, f.exp().rhs()[2].value());
+    }
+
+    #[test]
+    fn can_create_constraints() {
+        let e: Expression = Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0)],
+                                            Relationship::LEQ,
+                                            vec![new_const("volume", 2300.0)]);
+        let c1: Constraint = Constraint::Regular(RefCell::new(e));
+        match c1 {
+            Constraint::Regular(ref_cell) => {
+                let exp = ref_cell.borrow();
+                assert_eq!("x", exp.lhs()[0].name());
+                assert_eq!(2.0, exp.lhs()[0].coefficient());
+                assert_eq!(Relationship::LEQ, *exp.rel());
+                assert_eq!("y", exp.lhs()[1].name());
+                assert_eq!(3.0, exp.lhs()[1].coefficient());
+                assert_eq!("volume", exp.rhs()[0].name());
+                assert_eq!(2300.0, exp.rhs()[0].value());
+            },
+            _ => panic!("Unexpected variant."),
+        }
+        let c2: Constraint = Constraint::NonNegative(new_var("x", 2.0));
+        match c2 {
+            Constraint::NonNegative(abst_var) => {
+                assert_eq!("x", abst_var.name());
+                assert_eq!(2.0, abst_var.coefficient());
+            },
+            _ => panic!("Unexpected variant."),
+        }
+    }
+
+    #[test]
+    fn can_create_system_of_constraints() {
+        let e: Expression = Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0)],
+                                            Relationship::LEQ,
+                                            vec![new_const("volume", 2300.0)]);
+        let c1: Constraint = Constraint::Regular(RefCell::new(e));
+        let c2: Constraint = Constraint::NonNegative(new_var("x", 2.0));
+        let s: SystemOfConstraints = SystemOfConstraints::new(vec![c1, c2]);
+        for constraint in s.system() {
+            match constraint {
+                &Constraint::Regular(ref ref_cell) => {
+                    let exp = ref_cell.borrow();
+                    assert_eq!("x", exp.lhs()[0].name());
+                    assert_eq!(2.0, exp.lhs()[0].coefficient());
+                    assert_eq!(Relationship::LEQ, *exp.rel());
+                    assert_eq!("y", exp.lhs()[1].name());
+                    assert_eq!(3.0, exp.lhs()[1].coefficient());
+                    assert_eq!("volume", exp.rhs()[0].name());
+                    assert_eq!(2300.0, exp.rhs()[0].value());
+                },
+                &Constraint::NonNegative(ref abst_var) => {
+                    assert_eq!("x", abst_var.name());
+                    assert_eq!(2.0, abst_var.coefficient());
+                },
+            }
+        }
     }
 }
