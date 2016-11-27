@@ -1,4 +1,5 @@
 mod math;
+mod objective;
 
 #[cfg(test)]
 mod tests {
