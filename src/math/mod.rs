@@ -79,4 +79,22 @@ mod tests {
         assert_eq!("bonus", e.rhs()[2].name());
         assert_eq!(1000.0, e.rhs()[2].value());
     }
+
+    #[test]
+    fn can_mul_both_sides_of_expressions() {
+        let mut e1: Expression =
+            Expression::new(vec![new_var("Z", 1.0)],
+                            Relationship::GEQ,
+                            vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
+        e1.mul_both_sides(-1.0);
+        assert_eq!("Z", e1.lhs()[0].name());
+        assert_eq!(-1.0, e1.lhs()[0].coefficient());
+        assert_eq!(Relationship::LEQ, *e1.rel());
+        assert_eq!("x", e1.rhs()[0].name());
+        assert_eq!(-2.0, e1.rhs()[0].coefficient());
+        assert_eq!("y", e1.rhs()[1].name());
+        assert_eq!(-3.0, e1.rhs()[1].coefficient());
+        assert_eq!("bonus", e1.rhs()[2].name());
+        assert_eq!(-1000.0, e1.rhs()[2].value());
+    }
 }
