@@ -32,16 +32,6 @@ mod tests {
     }
 
     #[test]
-    fn can_set_value() {
-        let abst_var_state: RefCell<AbstVar> = RefCell::new(new_const("days", 365.0));
-        {
-            let mut abst_var = abst_var_state.borrow_mut();
-            abst_var.set_value(366.0);
-        }
-        assert_eq!(366.0, abst_var_state.borrow().value());
-    }
-
-    #[test]
     fn can_create_constants() {
         let c: AbstVar = new_const("barrels in stock", 450.0);
         assert_eq!(AbstVar::Constant {
@@ -51,6 +41,16 @@ mod tests {
                    c);
         assert_eq!("barrels in stock", c.name());
         assert_eq!(450.0, c.value());
+    }
+
+    #[test]
+    fn can_set_value() {
+        let abst_var_state: RefCell<AbstVar> = RefCell::new(new_const("days", 365.0));
+        {
+            let mut abst_var = abst_var_state.borrow_mut();
+            abst_var.set_value(366.0);
+        }
+        assert_eq!(366.0, abst_var_state.borrow().value());
     }
 
     #[test]
