@@ -23,12 +23,22 @@ mod tests {
 
     #[test]
     fn can_set_coefficient() {
-        let v_state: RefCell<AbstVar> = RefCell::new(new_var("x", 2.0));
+        let abst_var_state: RefCell<AbstVar> = RefCell::new(new_var("x", 2.0));
         {
-            let mut v = v_state.borrow_mut();
-            v.set_coefficient(3.0);
+            let mut abst_var = abst_var_state.borrow_mut();
+            abst_var.set_coefficient(3.0);
         }
-        assert_eq!(3.0, v_state.borrow().coefficient());
+        assert_eq!(3.0, abst_var_state.borrow().coefficient());
+    }
+
+    #[test]
+    fn can_set_value() {
+        let abst_var_state: RefCell<AbstVar> = RefCell::new(new_const("days", 365.0));
+        {
+            let mut abst_var = abst_var_state.borrow_mut();
+            abst_var.set_value(366.0);
+        }
+        assert_eq!(366.0, abst_var_state.borrow().value());
     }
 
     #[test]
