@@ -29,10 +29,18 @@ impl Expression {
         &self.right_hand_side
     }
 
+    pub fn set_rel(&mut self, new_rel: Relationship) {
+        self.relationship = new_rel;
+    }
+
+    pub fn add_lhs(&mut self, to_add: AbstVar) {
+        self.left_hand_side.push(to_add);
+    }
+
     pub fn mul_both_sides(&mut self, by: f64) {
         mul_side(&mut self.left_hand_side, by);
         mul_side(&mut self.right_hand_side, by);
-        
+
         // Change sign if required
         if by.is_sign_negative() && self.relationship != Relationship::EQ {
             if self.relationship == Relationship::GEQ {
@@ -50,9 +58,8 @@ fn mul_side(side: &mut Vec<AbstVar>, by: f64) {
             &mut AbstVar::Variable { ref mut name, ref mut coefficient } => {
                 *coefficient = *coefficient * by
             }
-            &mut AbstVar::Constant { ref mut name, ref mut value } => {
-                *value = *value * by
-            }
+            &mut AbstVar::Constant { ref mut name, ref mut value } => *value = *value * by,
+            _ => panic!("Unexpected variant in this program logic."),
         };
     }
 }

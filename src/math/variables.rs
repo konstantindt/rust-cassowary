@@ -2,6 +2,7 @@
 pub enum AbstVar {
     Variable { name: String, coefficient: f64 },
     Constant { name: String, value: f64 },
+    SlackVar { name: String },
 }
 
 impl AbstVar {
@@ -9,6 +10,7 @@ impl AbstVar {
         match self {
             &AbstVar::Variable { ref name, coefficient } => name,
             &AbstVar::Constant { ref name, value } => name,
+            &AbstVar::SlackVar { ref name } => name,
         }
     }
 
@@ -53,4 +55,8 @@ pub fn new_const(n: &str, v: f64) -> AbstVar {
         name: n.to_string(),
         value: v,
     }
+}
+
+pub fn new_slack_var(n: String) -> AbstVar {
+    AbstVar::SlackVar { name: n }
 }

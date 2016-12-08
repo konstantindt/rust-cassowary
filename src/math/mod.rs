@@ -5,7 +5,7 @@ pub mod expressions;
 #[cfg(test)]
 mod tests {
     use std::cell::RefCell;
-    use math::variables::{AbstVar, new_var, new_const};
+    use math::variables::{AbstVar, new_var, new_const, new_slack_var};
     use math::relationships::Relationship;
     use math::expressions::Expression;
 
@@ -54,6 +54,12 @@ mod tests {
     }
 
     #[test]
+    fn can_create_slack_var() {
+        let s_var: AbstVar = new_slack_var("s1".to_string());
+        assert_eq!("s1", s_var.name());
+    }
+
+    #[test]
     fn can_create_relationships() {
         let r: Relationship = Relationship::EQ;
         assert_eq!(Relationship::EQ, r);
@@ -78,6 +84,51 @@ mod tests {
         assert_eq!(3.0, e.rhs()[1].coefficient());
         assert_eq!("bonus", e.rhs()[2].name());
         assert_eq!(1000.0, e.rhs()[2].value());
+    }
+
+    #[test]
+    fn can_set_rels() {
+        let e: Expression =
+            Expression::new(vec![new_var("Z", 1.0)],
+                            Relationship::LEQ,
+                            vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
+        let e_state: RefCell<Expression> = RefCell::new(e);
+        {
+            let mut exp = e_state.borrow_mut();
+            exp.set_rel(Relationship::EQ);
+        }
+        let exp = e_state.borrow();
+        assert_eq!(Relationship::EQ, *exp.rel());
+    }
+
+    #[test]
+    fn can_add_lhs() {
+        let e: Expression =
+            Expression::new(vec![new_var("Z", 1.0)],
+                            Relationship::EQ,
+                            vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
+        let e_state: RefCell<Expression> = RefCell::new(e);
+        {
+            let mut exp = e_state.borrow_mut();
+            exp.add_lhs(new_var("w", 9.0));
+            exp.add_lhs(new_const("weight", 700.0));
+            exp.add_lhs(new_slack_var("s1".to_string()));
+        }
+        let exp = e_state.borrow();
+        assert_eq!("Z", exp.lhs()[0].name());
+        assert_eq!(1.0, exp.lhs()[0].coefficient());
+        assert_eq!("w", exp.lhs()[1].name());
+        assert_eq!(9.0, exp.lhs()[1].coefficient());
+        assert_eq!("weight", exp.lhs()[2].name());
+        assert_eq!(700.0, exp.lhs()[2].value());
+        assert_eq!("s1", exp.lhs()[3].name());
+        assert_eq!(Relationship::EQ, *exp.rel());
+        assert_eq!("x", exp.rhs()[0].name());
+        assert_eq!(2.0, exp.rhs()[0].coefficient());
+        assert_eq!("y", exp.rhs()[1].name());
+        assert_eq!(3.0, exp.rhs()[1].coefficient());
+        assert_eq!("bonus", exp.rhs()[2].name());
+        assert_eq!(1000.0, exp.rhs()[2].value());
     }
 
     #[test]
