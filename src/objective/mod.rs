@@ -6,7 +6,7 @@ pub mod solvers;
 #[cfg(test)]
 mod tests {
     use std::cell::RefCell;
-    use math::variables::{AbstVar, new_var, new_const};
+    use math::variables::{new_var, new_const};
     use math::relationships::Relationship;
     use math::expressions::Expression;
     use objective::problems::ProblemType;
