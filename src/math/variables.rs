@@ -42,7 +42,7 @@ impl AbstVar {
         match self {
             &AbstVar::Variable { ref coefficient, .. } => *coefficient,
             &AbstVar::Constant { ref value, .. } => *value,
-            _ => panic!("This variant does not support this method call."),
+            &AbstVar::SlackVar { .. } => 1.0,
         }
     }
 

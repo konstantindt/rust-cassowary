@@ -60,6 +60,12 @@ mod tests {
     }
 
     #[test]
+    fn can_get_from_slack_var() {
+        let s_var: AbstVar = new_slack_var("s1".to_string());
+        assert_eq!(1.0, s_var.get_data());
+    }
+
+    #[test]
     fn can_create_relationships() {
         let r: Relationship = Relationship::EQ;
         assert_eq!(Relationship::EQ, r);
