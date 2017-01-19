@@ -18,7 +18,7 @@ mod tests {
                    },
                    v);
         assert_eq!("x", v.name());
-        assert_eq!(2.0, v.coefficient());
+        assert_eq!(2.0, v.get_data());
     }
 
     #[test]
@@ -26,9 +26,9 @@ mod tests {
         let abst_var_state: RefCell<AbstVar> = RefCell::new(new_var("x", 2.0));
         {
             let mut abst_var = abst_var_state.borrow_mut();
-            abst_var.set_coefficient(3.0);
+            abst_var.set_data(3.0);
         }
-        assert_eq!(3.0, abst_var_state.borrow().coefficient());
+        assert_eq!(3.0, abst_var_state.borrow().get_data());
     }
 
     #[test]
@@ -40,7 +40,7 @@ mod tests {
                    },
                    c);
         assert_eq!("barrels in stock", c.name());
-        assert_eq!(450.0, c.value());
+        assert_eq!(450.0, c.get_data());
     }
 
     #[test]
@@ -48,9 +48,9 @@ mod tests {
         let abst_var_state: RefCell<AbstVar> = RefCell::new(new_const("days", 365.0));
         {
             let mut abst_var = abst_var_state.borrow_mut();
-            abst_var.set_value(366.0);
+            abst_var.set_data(366.0);
         }
-        assert_eq!(366.0, abst_var_state.borrow().value());
+        assert_eq!(366.0, abst_var_state.borrow().get_data());
     }
 
     #[test]
@@ -76,14 +76,14 @@ mod tests {
                             Relationship::EQ,
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
         assert_eq!("Z", e.lhs()[0].name());
-        assert_eq!(1.0, e.lhs()[0].coefficient());
+        assert_eq!(1.0, e.lhs()[0].get_data());
         assert_eq!(Relationship::EQ, *e.rel());
         assert_eq!("x", e.rhs()[0].name());
-        assert_eq!(2.0, e.rhs()[0].coefficient());
+        assert_eq!(2.0, e.rhs()[0].get_data());
         assert_eq!("y", e.rhs()[1].name());
-        assert_eq!(3.0, e.rhs()[1].coefficient());
+        assert_eq!(3.0, e.rhs()[1].get_data());
         assert_eq!("bonus", e.rhs()[2].name());
-        assert_eq!(1000.0, e.rhs()[2].value());
+        assert_eq!(1000.0, e.rhs()[2].get_data());
     }
 
     #[test]
@@ -116,19 +116,19 @@ mod tests {
         }
         let exp = e_state.borrow();
         assert_eq!("Z", exp.lhs()[0].name());
-        assert_eq!(1.0, exp.lhs()[0].coefficient());
+        assert_eq!(1.0, exp.lhs()[0].get_data());
         assert_eq!("w", exp.lhs()[1].name());
-        assert_eq!(9.0, exp.lhs()[1].coefficient());
+        assert_eq!(9.0, exp.lhs()[1].get_data());
         assert_eq!("weight", exp.lhs()[2].name());
-        assert_eq!(700.0, exp.lhs()[2].value());
+        assert_eq!(700.0, exp.lhs()[2].get_data());
         assert_eq!("s1", exp.lhs()[3].name());
         assert_eq!(Relationship::EQ, *exp.rel());
         assert_eq!("x", exp.rhs()[0].name());
-        assert_eq!(2.0, exp.rhs()[0].coefficient());
+        assert_eq!(2.0, exp.rhs()[0].get_data());
         assert_eq!("y", exp.rhs()[1].name());
-        assert_eq!(3.0, exp.rhs()[1].coefficient());
+        assert_eq!(3.0, exp.rhs()[1].get_data());
         assert_eq!("bonus", exp.rhs()[2].name());
-        assert_eq!(1000.0, exp.rhs()[2].value());
+        assert_eq!(1000.0, exp.rhs()[2].get_data());
     }
 
     #[test]
@@ -139,13 +139,13 @@ mod tests {
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
         e1.mul_both_sides(-1.0);
         assert_eq!("Z", e1.lhs()[0].name());
-        assert_eq!(-1.0, e1.lhs()[0].coefficient());
+        assert_eq!(-1.0, e1.lhs()[0].get_data());
         assert_eq!(Relationship::LEQ, *e1.rel());
         assert_eq!("x", e1.rhs()[0].name());
-        assert_eq!(-2.0, e1.rhs()[0].coefficient());
+        assert_eq!(-2.0, e1.rhs()[0].get_data());
         assert_eq!("y", e1.rhs()[1].name());
-        assert_eq!(-3.0, e1.rhs()[1].coefficient());
+        assert_eq!(-3.0, e1.rhs()[1].get_data());
         assert_eq!("bonus", e1.rhs()[2].name());
-        assert_eq!(-1000.0, e1.rhs()[2].value());
+        assert_eq!(-1000.0, e1.rhs()[2].get_data());
     }
 }

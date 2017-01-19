@@ -38,32 +38,20 @@ impl AbstVar {
         }
     }
 
-    pub fn coefficient(&self) -> f64 {
+    pub fn get_data(&self) -> f64 {
         match self {
             &AbstVar::Variable { ref coefficient, .. } => *coefficient,
-            _ => panic!("This variant does not support this method call."),
-        }
-    }
-
-    pub fn value(&self) -> f64 {
-        match self {
             &AbstVar::Constant { ref value, .. } => *value,
             _ => panic!("This variant does not support this method call."),
         }
     }
 
-    pub fn set_coefficient(&mut self, c: f64) {
+    pub fn set_data(&mut self, d: f64) {
         match self {
-            &mut AbstVar::Variable { ref mut coefficient, .. } => *coefficient = c,
+            &mut AbstVar::Variable { ref mut coefficient, .. } => *coefficient = d,
+            &mut AbstVar::Constant { ref mut value, .. } => *value = d,
             _ => panic!("This variant does not support this method call."),
-        }
-    }
-
-    pub fn set_value(&mut self, v: f64) {
-        match self {
-            &mut AbstVar::Constant { ref mut value, .. } => *value = v,
-            _ => panic!("This variant does not support this method call."),
-        }
+        };
     }
 }
 
