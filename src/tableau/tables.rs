@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 pub struct Table {
-    column_names: HashMap<String, usize>,
+    column_names: HashMap<String, usize>, // assume last column reserved
     rows: Vec<Vec<f64>>,
 }
 

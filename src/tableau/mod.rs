@@ -1,5 +1,7 @@
 pub mod tables;
 pub mod initials;
+pub mod enter_vars;
+pub mod leave_vars;
 
 #[cfg(test)]
 mod tests {
@@ -14,6 +16,8 @@ mod tests {
     use objective::solvers::transform_leq_rels;
     use tableau::tables::Table;
     use tableau::initials::get_initial_table_from;
+    use tableau::enter_vars::get_enter_var_column_index;
+    use tableau::leave_vars::get_leave_var_row_index;
 
     #[test]
     fn can_create_tables() {
@@ -57,6 +61,79 @@ mod tests {
         let system = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
         transform_leq_rels(&system);
         let table = get_initial_table_from(&f, &system);
+        let table_header = table.get_column_names();
+        let table_rows = table.get_rows();
+        assert_eq!(6, table_header.len());
+        assert_eq!(3, table_rows.len());
+        assert!(table_header.contains_key("x1"));
+        assert!(table_header.contains_key("x2"));
+        assert!(table_header.contains_key("x3"));
+        assert!(table_header.contains_key("s1"));
+        assert!(table_header.contains_key("s2"));
+        assert!(table_header.contains_key("RHS"));
+        assert_eq!(0, *table_header.get("x1").unwrap());
+        assert_eq!(1, *table_header.get("x2").unwrap());
+        assert_eq!(2, *table_header.get("x3").unwrap());
+        assert_eq!(3, *table_header.get("s1").unwrap());
+        assert_eq!(4, *table_header.get("s2").unwrap());
+        assert_eq!(5, *table_header.get("RHS").unwrap());
+        assert_eq!(vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0], table_rows[0]);
+        assert_eq!(vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0], table_rows[1]);
+        assert_eq!(vec![6.0, 14.0, 13.0, 0.0, 0.0, 0.0], table_rows[2]);
+    }
+
+    #[test]
+    fn can_get_enter_var_column_index() {
+        let table_rows: Vec<Vec<f64>> = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
+                                             vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
+                                             vec![6.0, 14.0, 13.0, 0.0, 0.0, 0.0]];
+        let mut column_names: HashMap<String, usize> = HashMap::new();
+        column_names.insert("x1".to_string(), 0);
+        column_names.insert("x2".to_string(), 1);
+        column_names.insert("x3".to_string(), 2);
+        column_names.insert("s1".to_string(), 3);
+        column_names.insert("s2".to_string(), 4);
+        column_names.insert("RHS".to_string(), 5);
+        let table = Table::new(column_names, table_rows);
+        assert_eq!(1, get_enter_var_column_index(&table));
+        // Make sure no table modification
+        let table_header = table.get_column_names();
+        let table_rows = table.get_rows();
+        assert_eq!(6, table_header.len());
+        assert_eq!(3, table_rows.len());
+        assert!(table_header.contains_key("x1"));
+        assert!(table_header.contains_key("x2"));
+        assert!(table_header.contains_key("x3"));
+        assert!(table_header.contains_key("s1"));
+        assert!(table_header.contains_key("s2"));
+        assert!(table_header.contains_key("RHS"));
+        assert_eq!(0, *table_header.get("x1").unwrap());
+        assert_eq!(1, *table_header.get("x2").unwrap());
+        assert_eq!(2, *table_header.get("x3").unwrap());
+        assert_eq!(3, *table_header.get("s1").unwrap());
+        assert_eq!(4, *table_header.get("s2").unwrap());
+        assert_eq!(5, *table_header.get("RHS").unwrap());
+        assert_eq!(vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0], table_rows[0]);
+        assert_eq!(vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0], table_rows[1]);
+        assert_eq!(vec![6.0, 14.0, 13.0, 0.0, 0.0, 0.0], table_rows[2]);
+    }
+
+    #[test]
+    fn can_get_enter_var_row_index() {
+        let table_rows: Vec<Vec<f64>> = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
+                                             vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
+                                             vec![6.0, 14.0, 13.0, 0.0, 0.0, 0.0]];
+        let mut column_names: HashMap<String, usize> = HashMap::new();
+        column_names.insert("x1".to_string(), 0);
+        column_names.insert("x2".to_string(), 1);
+        column_names.insert("x3".to_string(), 2);
+        column_names.insert("s1".to_string(), 3);
+        column_names.insert("s2".to_string(), 4);
+        column_names.insert("RHS".to_string(), 5);
+        let table = Table::new(column_names, table_rows);
+        let enter_var_index = get_enter_var_column_index(&table);
+        assert_eq!(0, get_leave_var_row_index(enter_var_index, &table));
+        // Make sure no table modification
         let table_header = table.get_column_names();
         let table_rows = table.get_rows();
         assert_eq!(6, table_header.len());
