@@ -32,14 +32,14 @@ mod tests {
         let f: Function = Function::new(e, ProblemType::MAX);
         assert_eq!(ProblemType::MAX, *f.p_type());
         assert_eq!("Z", f.exp().lhs()[0].name());
-        assert_eq!(1.0, f.exp().lhs()[0].coefficient());
+        assert_eq!(1.0, f.exp().lhs()[0].get_data());
         assert_eq!(Relationship::EQ, *f.exp().rel());
         assert_eq!("x", f.exp().rhs()[0].name());
-        assert_eq!(2.0, f.exp().rhs()[0].coefficient());
+        assert_eq!(2.0, f.exp().rhs()[0].get_data());
         assert_eq!("y", f.exp().rhs()[1].name());
-        assert_eq!(3.0, f.exp().rhs()[1].coefficient());
+        assert_eq!(3.0, f.exp().rhs()[1].get_data());
         assert_eq!("bonus", f.exp().rhs()[2].name());
-        assert_eq!(1000.0, f.exp().rhs()[2].value());
+        assert_eq!(1000.0, f.exp().rhs()[2].get_data());
     }
 
     #[test]
@@ -52,12 +52,12 @@ mod tests {
             Constraint::Regular(ref_cell) => {
                 let exp = ref_cell.borrow();
                 assert_eq!("x", exp.lhs()[0].name());
-                assert_eq!(2.0, exp.lhs()[0].coefficient());
+                assert_eq!(2.0, exp.lhs()[0].get_data());
                 assert_eq!(Relationship::LEQ, *exp.rel());
                 assert_eq!("y", exp.lhs()[1].name());
-                assert_eq!(3.0, exp.lhs()[1].coefficient());
+                assert_eq!(3.0, exp.lhs()[1].get_data());
                 assert_eq!("volume", exp.rhs()[0].name());
-                assert_eq!(2300.0, exp.rhs()[0].value());
+                assert_eq!(2300.0, exp.rhs()[0].get_data());
             }
             _ => panic!("Unexpected variant."),
         }
@@ -65,7 +65,7 @@ mod tests {
         match c2 {
             Constraint::NonNegative(abst_var) => {
                 assert_eq!("x", abst_var.name());
-                assert_eq!(2.0, abst_var.coefficient());
+                assert_eq!(2.0, abst_var.get_data());
             }
             _ => panic!("Unexpected variant."),
         }
@@ -84,16 +84,16 @@ mod tests {
                 &Constraint::Regular(ref ref_cell) => {
                     let exp = ref_cell.borrow();
                     assert_eq!("x", exp.lhs()[0].name());
-                    assert_eq!(2.0, exp.lhs()[0].coefficient());
+                    assert_eq!(2.0, exp.lhs()[0].get_data());
                     assert_eq!(Relationship::LEQ, *exp.rel());
                     assert_eq!("y", exp.lhs()[1].name());
-                    assert_eq!(3.0, exp.lhs()[1].coefficient());
+                    assert_eq!(3.0, exp.lhs()[1].get_data());
                     assert_eq!("volume", exp.rhs()[0].name());
-                    assert_eq!(2300.0, exp.rhs()[0].value());
+                    assert_eq!(2300.0, exp.rhs()[0].get_data());
                 }
                 &Constraint::NonNegative(ref abst_var) => {
                     assert_eq!("x", abst_var.name());
-                    assert_eq!(2.0, abst_var.coefficient());
+                    assert_eq!(2.0, abst_var.get_data());
                 }
             }
         }
@@ -116,12 +116,12 @@ mod tests {
             Constraint::Regular(ref ref_cell) => {
                 let exp = ref_cell.borrow();
                 assert_eq!("x", exp.lhs()[0].name());
-                assert_eq!(2.0, exp.lhs()[0].coefficient());
+                assert_eq!(2.0, exp.lhs()[0].get_data());
                 assert_eq!(Relationship::LEQ, *exp.rel());
                 assert_eq!("y", exp.lhs()[1].name());
-                assert_eq!(3.0, exp.lhs()[1].coefficient());
+                assert_eq!(3.0, exp.lhs()[1].get_data());
                 assert_eq!("volume", exp.rhs()[0].name());
-                assert_eq!(2300.0, exp.rhs()[0].value());
+                assert_eq!(2300.0, exp.rhs()[0].get_data());
             }
             _ => panic!("Unexpected variant in this program logic."),
         };
@@ -129,19 +129,19 @@ mod tests {
             Constraint::Regular(ref ref_cell) => {
                 let exp = ref_cell.borrow();
                 assert_eq!("w", exp.lhs()[0].name());
-                assert_eq!(-6.0, exp.lhs()[0].coefficient());
+                assert_eq!(-6.0, exp.lhs()[0].get_data());
                 assert_eq!(Relationship::LEQ, *exp.rel());
                 assert_eq!("z", exp.lhs()[1].name());
-                assert_eq!(-9.0, exp.lhs()[1].coefficient());
+                assert_eq!(-9.0, exp.lhs()[1].get_data());
                 assert_eq!("area", exp.rhs()[0].name());
-                assert_eq!(-300.0, exp.rhs()[0].value());
+                assert_eq!(-300.0, exp.rhs()[0].get_data());
             }
             _ => panic!("Unexpected variant in this program logic."),
         };
         match s.system()[2] {
             Constraint::NonNegative(ref abst_var) => {
                 assert_eq!("x", abst_var.name());
-                assert_eq!(2.0, abst_var.coefficient());
+                assert_eq!(2.0, abst_var.get_data());
             }
             _ => panic!("Unexpected variant in this program logic."),
         };
@@ -164,13 +164,13 @@ mod tests {
             Constraint::Regular(ref ref_cell) => {
                 let exp = ref_cell.borrow();
                 assert_eq!("x", exp.lhs()[0].name());
-                assert_eq!(2.0, exp.lhs()[0].coefficient());
+                assert_eq!(2.0, exp.lhs()[0].get_data());
                 assert_eq!(Relationship::EQ, *exp.rel());
                 assert_eq!("y", exp.lhs()[1].name());
-                assert_eq!(3.0, exp.lhs()[1].coefficient());
+                assert_eq!(3.0, exp.lhs()[1].get_data());
                 assert_eq!("s1", exp.lhs()[2].name());
                 assert_eq!("volume", exp.rhs()[0].name());
-                assert_eq!(2300.0, exp.rhs()[0].value());
+                assert_eq!(2300.0, exp.rhs()[0].get_data());
             }
             _ => panic!("Unexpected variant in this program logic."),
         };
@@ -178,20 +178,20 @@ mod tests {
             Constraint::Regular(ref ref_cell) => {
                 let exp = ref_cell.borrow();
                 assert_eq!("w", exp.lhs()[0].name());
-                assert_eq!(6.0, exp.lhs()[0].coefficient());
+                assert_eq!(6.0, exp.lhs()[0].get_data());
                 assert_eq!(Relationship::EQ, *exp.rel());
                 assert_eq!("z", exp.lhs()[1].name());
-                assert_eq!(9.0, exp.lhs()[1].coefficient());
+                assert_eq!(9.0, exp.lhs()[1].get_data());
                 assert_eq!("s2", exp.lhs()[2].name());
                 assert_eq!("area", exp.rhs()[0].name());
-                assert_eq!(300.0, exp.rhs()[0].value());
+                assert_eq!(300.0, exp.rhs()[0].get_data());
             }
             _ => panic!("Unexpected variant in this program logic."),
         };
         match s.system()[2] {
             Constraint::NonNegative(ref abst_var) => {
                 assert_eq!("x", abst_var.name());
-                assert_eq!(2.0, abst_var.coefficient());
+                assert_eq!(2.0, abst_var.get_data());
             }
             _ => panic!("Unexpected variant in this program logic."),
         };
