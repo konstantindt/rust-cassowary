@@ -9,7 +9,7 @@ pub fn get_leave_var_row_index(enter_var_index: usize, table: &Table) -> usize {
         let other_value = table_rows[i][last_column_index] / table_rows[i][enter_var_index];
         let old_min_value = min_value;
         min_value = old_min_value.min(other_value);
-        // Did we assign a new max?
+        // Did we assign a new min?
         if min_value != old_min_value {
             colunm_index = i;
         }
