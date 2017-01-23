@@ -1,6 +1,4 @@
 use std::collections::HashMap;
-use math::variables::AbstVar;
-use math::expressions::Expression;
 use objective::functions::Function;
 use objective::constraints::Constraint;
 use objective::constraints::SystemOfConstraints;
