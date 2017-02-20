@@ -7,13 +7,8 @@ pub fn transform_leq_rels(constraints: &SystemOfConstraints) {
     for i in 0..constraints.system().len() {
         match constraints.system()[i] {
             Constraint::Regular(ref ref_cell) => {
-                let must_change: bool;
-                {
-                    let exp = ref_cell.borrow();
-                    must_change = *exp.rel() == Relationship::LEQ;
-                }
-                if must_change {
-                    let mut exp = ref_cell.borrow_mut();
+                let mut exp = ref_cell.borrow_mut();
+                if *exp.rel() == Relationship::LEQ {
                     exp.add_lhs(new_slack_var(format!("{}{}", "s", i + 1)));
                     exp.set_rel(Relationship::EQ);
                 }
