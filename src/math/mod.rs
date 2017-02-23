@@ -138,6 +138,108 @@ mod tests {
     }
 
     #[test]
+    fn can_move_from_lhs_side() {
+        let mut e1: Expression =
+            Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)],
+                            Relationship::GEQ,
+                            vec![new_var("Z", 1.0)]);
+
+        e1.move_from_lhs_side(1, false);
+        assert_eq!(2, e1.lhs().len());
+        assert_eq!("x", e1.lhs()[0].name());
+        assert_eq!(2.0, e1.lhs()[0].get_data());
+        assert_eq!("bonus", e1.lhs()[1].name());
+        assert_eq!(1000.0, e1.lhs()[1].get_data());
+        assert_eq!(Relationship::GEQ, *e1.rel());
+        assert_eq!(2, e1.rhs().len());
+        assert_eq!("Z", e1.rhs()[0].name());
+        assert_eq!(1.0, e1.rhs()[0].get_data());
+        assert_eq!("y", e1.rhs()[1].name());
+        assert_eq!(-3.0, e1.rhs()[1].get_data());
+
+        e1.move_from_lhs_side(0, true);
+        assert_eq!(1, e1.lhs().len());
+        assert_eq!("bonus", e1.lhs()[0].name());
+        assert_eq!(1000.0, e1.lhs()[0].get_data());
+        assert_eq!(Relationship::GEQ, *e1.rel());
+        assert_eq!(3, e1.rhs().len());
+        assert_eq!("x", e1.rhs()[0].name());
+        assert_eq!(-2.0, e1.rhs()[0].get_data());
+        assert_eq!("Z", e1.rhs()[1].name());
+        assert_eq!(1.0, e1.rhs()[1].get_data());
+        assert_eq!("y", e1.rhs()[2].name());
+        assert_eq!(-3.0, e1.rhs()[2].get_data());
+
+        e1.move_from_lhs_side(0, false);
+        assert_eq!(1, e1.lhs().len());
+        assert_eq!("zero", e1.lhs()[0].name());
+        assert_eq!(0.0, e1.lhs()[0].get_data());
+        assert_eq!(Relationship::GEQ, *e1.rel());
+        assert_eq!(4, e1.rhs().len());
+        assert_eq!("x", e1.rhs()[0].name());
+        assert_eq!(-2.0, e1.rhs()[0].get_data());
+        assert_eq!("Z", e1.rhs()[1].name());
+        assert_eq!(1.0, e1.rhs()[1].get_data());
+        assert_eq!("y", e1.rhs()[2].name());
+        assert_eq!(-3.0, e1.rhs()[2].get_data());
+        assert_eq!("bonus", e1.rhs()[3].name());
+        assert_eq!(-1000.0, e1.rhs()[3].get_data());
+
+
+        let mut e2: Expression =
+            Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)],
+                            Relationship::GEQ,
+                            vec![new_var("Z", 1.0), new_slack_var("s1".to_string())]);
+
+        e2.move_from_lhs_side(1, false);
+        assert_eq!(2, e2.lhs().len());
+        assert_eq!("x", e2.lhs()[0].name());
+        assert_eq!(2.0, e2.lhs()[0].get_data());
+        assert_eq!("bonus", e2.lhs()[1].name());
+        assert_eq!(1000.0, e2.lhs()[1].get_data());
+        assert_eq!(Relationship::GEQ, *e2.rel());
+        assert_eq!(3, e2.rhs().len());
+        assert_eq!("Z", e2.rhs()[0].name());
+        assert_eq!(1.0, e2.rhs()[0].get_data());
+        assert_eq!("y", e2.rhs()[1].name());
+        assert_eq!(-3.0, e2.rhs()[1].get_data());
+        assert_eq!("s1", e2.rhs()[2].name());
+        assert_eq!(1.0, e2.rhs()[2].get_data());
+
+        e2.move_from_lhs_side(0, true);
+        assert_eq!(1, e2.lhs().len());
+        assert_eq!("bonus", e2.lhs()[0].name());
+        assert_eq!(1000.0, e2.lhs()[0].get_data());
+        assert_eq!(Relationship::GEQ, *e2.rel());
+        assert_eq!(4, e2.rhs().len());
+        assert_eq!("x", e2.rhs()[0].name());
+        assert_eq!(-2.0, e2.rhs()[0].get_data());
+        assert_eq!("Z", e2.rhs()[1].name());
+        assert_eq!(1.0, e2.rhs()[1].get_data());
+        assert_eq!("y", e2.rhs()[2].name());
+        assert_eq!(-3.0, e2.rhs()[2].get_data());
+        assert_eq!("s1", e2.rhs()[3].name());
+        assert_eq!(1.0, e2.rhs()[3].get_data());
+
+        e2.move_from_lhs_side(0, true);
+        assert_eq!(1, e2.lhs().len());
+        assert_eq!("zero", e2.lhs()[0].name());
+        assert_eq!(0.0, e2.lhs()[0].get_data());
+        assert_eq!(Relationship::GEQ, *e2.rel());
+        assert_eq!(5, e2.rhs().len());
+        assert_eq!("bonus", e2.rhs()[0].name());
+        assert_eq!(-1000.0, e2.rhs()[0].get_data());
+        assert_eq!("x", e2.rhs()[1].name());
+        assert_eq!(-2.0, e2.rhs()[1].get_data());
+        assert_eq!("Z", e2.rhs()[2].name());
+        assert_eq!(1.0, e2.rhs()[2].get_data());
+        assert_eq!("y", e2.rhs()[3].name());
+        assert_eq!(-3.0, e2.rhs()[3].get_data());
+        assert_eq!("s1", e2.rhs()[4].name());
+        assert_eq!(1.0, e2.rhs()[4].get_data());
+    }
+
+    #[test]
     fn can_mul_both_sides_of_expressions() {
         let mut e1: Expression =
             Expression::new(vec![new_var("Z", 1.0)],

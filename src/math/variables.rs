@@ -53,6 +53,14 @@ impl AbstVar {
             _ => panic!("This variant does not support this method call."),
         };
     }
+
+    pub fn change_sign(&mut self) {
+        match self {
+            &mut AbstVar::Variable { ref mut coefficient, .. } => *coefficient *= -1.0,
+            &mut AbstVar::Constant { ref mut value, .. } => *value *= -1.0,
+            _ => panic!("This variant does not support this method call."),
+        }
+    }
 }
 
 pub fn new_var(n: &str, c: f64) -> AbstVar {
