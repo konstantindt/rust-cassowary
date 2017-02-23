@@ -1,3 +1,5 @@
+use std::mem;
+use std::result::Result;
 use math::variables::AbstVar;
 use math::variables::new_const;
 use math::relationships::Relationship;
@@ -57,6 +59,15 @@ impl Expression {
             } else {
                 self.relationship = Relationship::GEQ;
             }
+        }
+    }
+
+    pub fn swap_sides(&mut self) -> Result<&str, &str> {
+        if self.relationship == Relationship::EQ {
+            mem::swap(&mut self.left_hand_side, &mut self.right_hand_side);
+            Ok("Swapped!")
+        } else {
+            Err("Invalid state: relationship must be \"EQ\".")
         }
     }
 }

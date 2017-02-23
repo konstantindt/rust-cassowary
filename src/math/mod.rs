@@ -256,4 +256,31 @@ mod tests {
         assert_eq!("bonus", e1.rhs()[2].name());
         assert_eq!(-1000.0, e1.rhs()[2].get_data());
     }
+
+    #[test]
+    fn can_swap_sides() {
+        let mut exp: Expression =
+            Expression::new(vec![new_var("Z", 1.0)],
+                            Relationship::EQ,
+                            vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
+
+        exp.swap_sides().unwrap();
+        assert_eq!(3, exp.lhs().len());
+        assert_eq!("x", exp.lhs()[0].name());
+        assert_eq!(2.0, exp.lhs()[0].get_data());
+        assert_eq!("y", exp.lhs()[1].name());
+        assert_eq!(3.0, exp.lhs()[1].get_data());
+        assert_eq!("bonus", exp.lhs()[2].name());
+        assert_eq!(1000.0, exp.lhs()[2].get_data());
+        assert_eq!(Relationship::EQ, *exp.rel());
+        assert_eq!(1, exp.rhs().len());
+        assert_eq!("Z", exp.rhs()[0].name());
+        assert_eq!(1.0, exp.rhs()[0].get_data());
+
+        exp.set_rel(Relationship::LEQ);
+        assert!(exp.swap_sides().is_err());
+
+        exp.set_rel(Relationship::GEQ);
+        assert!(exp.swap_sides().is_err());
+    }
 }
