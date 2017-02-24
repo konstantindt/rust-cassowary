@@ -1,6 +1,6 @@
 use std::hash::{Hash, Hasher};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AbstVar {
     Variable { name: String, coefficient: f64 },
     Constant { name: String, value: f64 },
