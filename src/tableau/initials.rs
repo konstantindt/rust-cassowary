@@ -49,7 +49,7 @@ pub fn get_initial_table_from(fun: &Function, constraints: &SystemOfConstraints)
             &Constraint::NonNegative(_) => continue,
         }
     }
-    for var in fun.exp().borrow().rhs() {
+    for var in fun.exp_max().borrow().rhs() {
         rows[row_index][*column_names.get(var.name()).unwrap()] = var.get_data();
     }
     // Set the value of Z to be initially 0 in the table.
