@@ -27,7 +27,7 @@ pub fn get_initial_table_from(fun: &Function, constraints: &SystemOfConstraints)
     // ... and don't forget about the constant on the right.
     let map_len = column_names.len();
     column_names.insert("RHS".to_string(), map_len);
-    for var in fun.exp().rhs() {
+    for var in fun.exp().borrow().rhs() {
         let map_len = column_names.len();
         column_names.entry(var.name().to_string()).or_insert(map_len);
     }
@@ -49,7 +49,7 @@ pub fn get_initial_table_from(fun: &Function, constraints: &SystemOfConstraints)
             &Constraint::NonNegative(_) => continue,
         }
     }
-    for var in fun.exp().rhs() {
+    for var in fun.exp().borrow().rhs() {
         rows[row_index][*column_names.get(var.name()).unwrap()] = var.get_data();
     }
     // Set the value of Z to be initially 0 in the table.

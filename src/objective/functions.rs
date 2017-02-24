@@ -1,28 +1,29 @@
+use std::cell::RefCell;
 use math::variables::new_var;
 use math::relationships::Relationship;
 use math::expressions::Expression;
 use objective::problems::ProblemType;
 
 pub struct Function {
-    expression: Expression,
+    expression: RefCell<Expression>,
     problem_type: ProblemType,
-    expression_max: Option<Expression>,
+    expression_max: Option<RefCell<Expression>>,
 }
 
 impl Function {
     pub fn new(e: Expression, p_t: ProblemType) -> Function {
         let mut e_m = None;
         if p_t == ProblemType::MIN {
-            e_m = Some(create_expression_to_max(&e));
+            e_m = Some(RefCell::new(create_expression_to_max(&e)));
         }
         Function {
-            expression: e,
+            expression: RefCell::new(e),
             problem_type: p_t,
             expression_max: e_m,
         }
     }
 
-    pub fn exp(&self) -> &Expression {
+    pub fn exp(&self) -> &RefCell<Expression> {
         &self.expression
     }
 
@@ -30,7 +31,7 @@ impl Function {
         &self.problem_type
     }
 
-    pub fn exp_max(&self) -> &Expression {
+    pub fn exp_max(&self) -> &RefCell<Expression> {
         if let Some(ref exp_to_max) = self.expression_max {
             &exp_to_max
         } else {

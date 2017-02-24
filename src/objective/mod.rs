@@ -13,7 +13,7 @@ mod tests {
     use objective::functions::Function;
     use objective::constraints::Constraint;
     use objective::constraints::SystemOfConstraints;
-    use objective::solvers::{transform_leq_rels};
+    use objective::solvers::{transform_leq_rels, rearrange_fun_eq_zero};
 
     #[test]
     fn can_create_problem_types() {
@@ -30,52 +30,56 @@ mod tests {
                             Relationship::EQ,
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
         let f1: Function = Function::new(e1, ProblemType::MAX);
+        let exp1 = f1.exp().borrow();
         assert_eq!(ProblemType::MAX, *f1.p_type());
-        assert_eq!("Z", f1.exp().lhs()[0].name());
-        assert_eq!(1.0, f1.exp().lhs()[0].get_data());
-        assert_eq!(Relationship::EQ, *f1.exp().rel());
-        assert_eq!("x", f1.exp().rhs()[0].name());
-        assert_eq!(2.0, f1.exp().rhs()[0].get_data());
-        assert_eq!("y", f1.exp().rhs()[1].name());
-        assert_eq!(3.0, f1.exp().rhs()[1].get_data());
-        assert_eq!("bonus", f1.exp().rhs()[2].name());
-        assert_eq!(1000.0, f1.exp().rhs()[2].get_data());
+        assert_eq!("Z", exp1.lhs()[0].name());
+        assert_eq!(1.0, exp1.lhs()[0].get_data());
+        assert_eq!(Relationship::EQ, *exp1.rel());
+        assert_eq!("x", exp1.rhs()[0].name());
+        assert_eq!(2.0, exp1.rhs()[0].get_data());
+        assert_eq!("y", exp1.rhs()[1].name());
+        assert_eq!(3.0, exp1.rhs()[1].get_data());
+        assert_eq!("bonus", exp1.rhs()[2].name());
+        assert_eq!(1000.0, exp1.rhs()[2].get_data());
 
-        assert_eq!("Z", f1.exp_max().lhs()[0].name());
-        assert_eq!(1.0, f1.exp_max().lhs()[0].get_data());
-        assert_eq!(Relationship::EQ, *f1.exp_max().rel());
-        assert_eq!("x", f1.exp_max().rhs()[0].name());
-        assert_eq!(2.0, f1.exp_max().rhs()[0].get_data());
-        assert_eq!("y", f1.exp_max().rhs()[1].name());
-        assert_eq!(3.0, f1.exp_max().rhs()[1].get_data());
-        assert_eq!("bonus", f1.exp_max().rhs()[2].name());
-        assert_eq!(1000.0, f1.exp_max().rhs()[2].get_data());
+        let exp1_max = f1.exp_max().borrow();
+        assert_eq!("Z", exp1_max.lhs()[0].name());
+        assert_eq!(1.0, exp1_max.lhs()[0].get_data());
+        assert_eq!(Relationship::EQ, *exp1_max.rel());
+        assert_eq!("x", exp1_max.rhs()[0].name());
+        assert_eq!(2.0, exp1_max.rhs()[0].get_data());
+        assert_eq!("y", exp1_max.rhs()[1].name());
+        assert_eq!(3.0, exp1_max.rhs()[1].get_data());
+        assert_eq!("bonus", exp1_max.rhs()[2].name());
+        assert_eq!(1000.0, exp1_max.rhs()[2].get_data());
 
         let e2: Expression =
             Expression::new(vec![new_var("Z", 1.0)],
                             Relationship::EQ,
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
         let f2: Function = Function::new(e2, ProblemType::MIN);
+        let exp2 = f2.exp().borrow();
         assert_eq!(ProblemType::MIN, *f2.p_type());
-        assert_eq!("Z", f2.exp().lhs()[0].name());
-        assert_eq!(1.0, f2.exp().lhs()[0].get_data());
-        assert_eq!(Relationship::EQ, *f2.exp().rel());
-        assert_eq!("x", f2.exp().rhs()[0].name());
-        assert_eq!(2.0, f2.exp().rhs()[0].get_data());
-        assert_eq!("y", f2.exp().rhs()[1].name());
-        assert_eq!(3.0, f2.exp().rhs()[1].get_data());
-        assert_eq!("bonus", f2.exp().rhs()[2].name());
-        assert_eq!(1000.0, f2.exp().rhs()[2].get_data());
+        assert_eq!("Z", exp2.lhs()[0].name());
+        assert_eq!(1.0, exp2.lhs()[0].get_data());
+        assert_eq!(Relationship::EQ, *exp2.rel());
+        assert_eq!("x", exp2.rhs()[0].name());
+        assert_eq!(2.0, exp2.rhs()[0].get_data());
+        assert_eq!("y", exp2.rhs()[1].name());
+        assert_eq!(3.0, exp2.rhs()[1].get_data());
+        assert_eq!("bonus", exp2.rhs()[2].name());
+        assert_eq!(1000.0, exp2.rhs()[2].get_data());
 
-        assert_eq!("Q", f2.exp_max().lhs()[0].name());
-        assert_eq!(1.0, f2.exp_max().lhs()[0].get_data());
-        assert_eq!(Relationship::EQ, *f2.exp_max().rel());
-        assert_eq!("x", f2.exp_max().rhs()[0].name());
-        assert_eq!(-2.0, f2.exp_max().rhs()[0].get_data());
-        assert_eq!("y", f2.exp_max().rhs()[1].name());
-        assert_eq!(-3.0, f2.exp_max().rhs()[1].get_data());
-        assert_eq!("bonus", f2.exp_max().rhs()[2].name());
-        assert_eq!(-1000.0, f2.exp_max().rhs()[2].get_data());
+        let exp2_max = f2.exp_max().borrow();
+        assert_eq!("Q", exp2_max.lhs()[0].name());
+        assert_eq!(1.0, exp2_max.lhs()[0].get_data());
+        assert_eq!(Relationship::EQ, *exp2_max.rel());
+        assert_eq!("x", exp2_max.rhs()[0].name());
+        assert_eq!(-2.0, exp2_max.rhs()[0].get_data());
+        assert_eq!("y", exp2_max.rhs()[1].name());
+        assert_eq!(-3.0, exp2_max.rhs()[1].get_data());
+        assert_eq!("bonus", exp2_max.rhs()[2].name());
+        assert_eq!(-1000.0, exp2_max.rhs()[2].get_data());
     }
 
     #[test]
@@ -183,5 +187,72 @@ mod tests {
             }
             _ => panic!("Unexpected variant in this program logic."),
         };
+    }
+
+    #[test]
+    fn can_rearrange_fun_eq_zero() {
+        let e1: Expression =
+            Expression::new(vec![new_var("Z", 1.0)],
+                            Relationship::EQ,
+                            vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
+        let mut f1: Function = Function::new(e1, ProblemType::MAX);
+        rearrange_fun_eq_zero(&mut f1);
+        let exp1 = f1.exp().borrow();
+        assert_eq!(ProblemType::MAX, *f1.p_type());
+        assert_eq!("zero", exp1.rhs()[0].name());
+        assert_eq!(0.0, exp1.rhs()[0].get_data());
+        assert_eq!(Relationship::EQ, *exp1.rel());
+        assert_eq!("x", exp1.lhs()[0].name());
+        assert_eq!(-2.0, exp1.lhs()[0].get_data());
+        assert_eq!("y", exp1.lhs()[1].name());
+        assert_eq!(-3.0, exp1.lhs()[1].get_data());
+        assert_eq!("bonus", exp1.lhs()[2].name());
+        assert_eq!(-1000.0, exp1.lhs()[2].get_data());
+        assert_eq!("Z", exp1.lhs()[3].name());
+        assert_eq!(1.0, exp1.lhs()[3].get_data());
+
+        let exp1_max = f1.exp_max().borrow();
+        assert_eq!("zero", exp1_max.rhs()[0].name());
+        assert_eq!(0.0, exp1_max.rhs()[0].get_data());
+        assert_eq!(Relationship::EQ, *exp1_max.rel());
+        assert_eq!("x", exp1_max.lhs()[0].name());
+        assert_eq!(-2.0, exp1_max.lhs()[0].get_data());
+        assert_eq!("y", exp1_max.lhs()[1].name());
+        assert_eq!(-3.0, exp1_max.lhs()[1].get_data());
+        assert_eq!("bonus", exp1_max.lhs()[2].name());
+        assert_eq!(-1000.0, exp1_max.lhs()[2].get_data());
+        assert_eq!("Z", exp1_max.lhs()[3].name());
+        assert_eq!(1.0, exp1_max.lhs()[3].get_data());
+
+        let e2: Expression =
+            Expression::new(vec![new_var("Z", 1.0)],
+                            Relationship::EQ,
+                            vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
+        let mut f2: Function = Function::new(e2, ProblemType::MIN);
+        rearrange_fun_eq_zero(&mut f2);
+        let exp2 = f2.exp().borrow();
+        assert_eq!(ProblemType::MIN, *f2.p_type());
+        assert_eq!("Z", exp2.lhs()[0].name());
+        assert_eq!(1.0, exp2.lhs()[0].get_data());
+        assert_eq!(Relationship::EQ, *exp2.rel());
+        assert_eq!("x", exp2.rhs()[0].name());
+        assert_eq!(2.0, exp2.rhs()[0].get_data());
+        assert_eq!("y", exp2.rhs()[1].name());
+        assert_eq!(3.0, exp2.rhs()[1].get_data());
+        assert_eq!("bonus", exp2.rhs()[2].name());
+        assert_eq!(1000.0, exp2.rhs()[2].get_data());
+
+        let exp2_max = f2.exp_max().borrow();
+        assert_eq!("zero", exp2_max.rhs()[0].name());
+        assert_eq!(0.0, exp2_max.rhs()[0].get_data());
+        assert_eq!(Relationship::EQ, *exp2_max.rel());
+        assert_eq!("x", exp2_max.lhs()[0].name());
+        assert_eq!(2.0, exp2_max.lhs()[0].get_data());
+        assert_eq!("y", exp2_max.lhs()[1].name());
+        assert_eq!(3.0, exp2_max.lhs()[1].get_data());
+        assert_eq!("bonus", exp2_max.lhs()[2].name());
+        assert_eq!(1000.0, exp2_max.lhs()[2].get_data());
+        assert_eq!("Q", exp2_max.lhs()[3].name());
+        assert_eq!(1.0, exp2_max.lhs()[3].get_data());
     }
 }
