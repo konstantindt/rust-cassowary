@@ -4,75 +4,60 @@ pub mod expressions;
 
 #[cfg(test)]
 mod tests {
-    use std::cell::RefCell;
     use math::variables::{AbstVar, new_var, new_const, new_slack_var};
     use math::relationships::Relationship;
     use math::expressions::Expression;
 
     #[test]
     fn can_create_variables() {
-        let v: AbstVar = new_var("x", 2.0);
+        let v1 = new_var("x", 2.0);
         assert_eq!(AbstVar::Variable {
                        name: "x".to_string(),
                        coefficient: 2.0,
                    },
-                   v);
-        assert_eq!("x", v.name());
-        assert_eq!(2.0, v.get_data());
-    }
+                   v1);
+        assert_eq!("x", v1.name());
+        assert_eq!(2.0, v1.get_data());
 
-    #[test]
-    fn can_set_coefficient() {
-        let abst_var_state: RefCell<AbstVar> = RefCell::new(new_var("x", 2.0));
-        {
-            let mut abst_var = abst_var_state.borrow_mut();
-            abst_var.set_data(3.0);
-        }
-        assert_eq!(3.0, abst_var_state.borrow().get_data());
-    }
-
-    #[test]
-    fn can_create_constants() {
-        let c: AbstVar = new_const("barrels in stock", 450.0);
+        let c1 = new_const("barrels in stock", 450.0);
         assert_eq!(AbstVar::Constant {
                        name: "barrels in stock".to_string(),
                        value: 450.0,
                    },
-                   c);
-        assert_eq!("barrels in stock", c.name());
-        assert_eq!(450.0, c.get_data());
+                   c1);
+        assert_eq!("barrels in stock", c1.name());
+        assert_eq!(450.0, c1.get_data());
+
+        let s_var = new_slack_var("s1".to_string());
+        assert_eq!(AbstVar::SlackVar {
+                       name: "s1".to_string(),
+                   },
+                   s_var);
+       assert_eq!("s1", s_var.name());
+       assert_eq!(1.0, s_var.get_data());
     }
 
     #[test]
-    fn can_set_value() {
-        let abst_var_state: RefCell<AbstVar> = RefCell::new(new_const("days", 365.0));
-        {
-            let mut abst_var = abst_var_state.borrow_mut();
-            abst_var.set_data(366.0);
-        }
-        assert_eq!(366.0, abst_var_state.borrow().get_data());
-    }
+    fn can_set_data() {
+        let mut c2 = new_const("barrels in stock", 450.0);
+        c2.set_data(366.0);
+        assert_eq!("barrels in stock", c2.name());
+        assert_eq!(366.0, c2.get_data());
 
-    #[test]
-    fn can_create_slack_var() {
-        let s_var: AbstVar = new_slack_var("s1".to_string());
-        assert_eq!("s1", s_var.name());
-    }
-
-    #[test]
-    fn can_get_from_slack_var() {
-        let s_var: AbstVar = new_slack_var("s1".to_string());
-        assert_eq!(1.0, s_var.get_data());
+        let mut v2 = new_var("x", 2.0);
+        v2.set_data(3.0);
+        assert_eq!(3.0, v2.get_data());
+        assert_eq!("x", v2.name());
     }
 
     #[test]
     fn can_create_relationships() {
-        let r: Relationship = Relationship::EQ;
-        assert_eq!(Relationship::EQ, r);
-        let r: Relationship = Relationship::LEQ;
-        assert_eq!(Relationship::LEQ, r);
-        let r: Relationship = Relationship::GEQ;
-        assert_eq!(Relationship::GEQ, r);
+        let r1: Relationship = Relationship::EQ;
+        assert_eq!(Relationship::EQ, r1);
+        let r2: Relationship = Relationship::LEQ;
+        assert_eq!(Relationship::LEQ, r2);
+        let r3: Relationship = Relationship::GEQ;
+        assert_eq!(Relationship::GEQ, r3);
     }
 
     #[test]
@@ -94,33 +79,23 @@ mod tests {
 
     #[test]
     fn can_set_rels() {
-        let e: Expression =
+        let mut exp: Expression =
             Expression::new(vec![new_var("Z", 1.0)],
                             Relationship::LEQ,
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
-        let e_state: RefCell<Expression> = RefCell::new(e);
-        {
-            let mut exp = e_state.borrow_mut();
-            exp.set_rel(Relationship::EQ);
-        }
-        let exp = e_state.borrow();
+        exp.set_rel(Relationship::EQ);
         assert_eq!(Relationship::EQ, *exp.rel());
     }
 
     #[test]
     fn can_add_lhs() {
-        let e: Expression =
+        let mut exp: Expression =
             Expression::new(vec![new_var("Z", 1.0)],
                             Relationship::EQ,
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
-        let e_state: RefCell<Expression> = RefCell::new(e);
-        {
-            let mut exp = e_state.borrow_mut();
-            exp.add_lhs(new_var("w", 9.0));
-            exp.add_lhs(new_const("weight", 700.0));
-            exp.add_lhs(new_slack_var("s1".to_string()));
-        }
-        let exp = e_state.borrow();
+        exp.add_lhs(new_var("w", 9.0));
+        exp.add_lhs(new_const("weight", 700.0));
+        exp.add_lhs(new_slack_var("s1".to_string()));
         assert_eq!("Z", exp.lhs()[0].name());
         assert_eq!(1.0, exp.lhs()[0].get_data());
         assert_eq!("w", exp.lhs()[1].name());
@@ -143,7 +118,6 @@ mod tests {
             Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)],
                             Relationship::GEQ,
                             vec![new_var("Z", 1.0)]);
-
         e1.move_from_lhs_side(1, false);
         assert_eq!(2, e1.lhs().len());
         assert_eq!("x", e1.lhs()[0].name());
@@ -190,7 +164,6 @@ mod tests {
             Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)],
                             Relationship::GEQ,
                             vec![new_var("Z", 1.0), new_slack_var("s1".to_string())]);
-
         e2.move_from_lhs_side(1, false);
         assert_eq!(2, e2.lhs().len());
         assert_eq!("x", e2.lhs()[0].name());
@@ -241,20 +214,20 @@ mod tests {
 
     #[test]
     fn can_mul_both_sides_of_expressions() {
-        let mut e1: Expression =
+        let mut exp: Expression =
             Expression::new(vec![new_var("Z", 1.0)],
                             Relationship::GEQ,
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
-        e1.mul_both_sides(-1.0);
-        assert_eq!("Z", e1.lhs()[0].name());
-        assert_eq!(-1.0, e1.lhs()[0].get_data());
-        assert_eq!(Relationship::LEQ, *e1.rel());
-        assert_eq!("x", e1.rhs()[0].name());
-        assert_eq!(-2.0, e1.rhs()[0].get_data());
-        assert_eq!("y", e1.rhs()[1].name());
-        assert_eq!(-3.0, e1.rhs()[1].get_data());
-        assert_eq!("bonus", e1.rhs()[2].name());
-        assert_eq!(-1000.0, e1.rhs()[2].get_data());
+        exp.mul_both_sides(-1.0);
+        assert_eq!("Z", exp.lhs()[0].name());
+        assert_eq!(-1.0, exp.lhs()[0].get_data());
+        assert_eq!(Relationship::LEQ, *exp.rel());
+        assert_eq!("x", exp.rhs()[0].name());
+        assert_eq!(-2.0, exp.rhs()[0].get_data());
+        assert_eq!("y", exp.rhs()[1].name());
+        assert_eq!(-3.0, exp.rhs()[1].get_data());
+        assert_eq!("bonus", exp.rhs()[2].name());
+        assert_eq!(-1000.0, exp.rhs()[2].get_data());
     }
 
     #[test]
@@ -263,7 +236,6 @@ mod tests {
             Expression::new(vec![new_var("Z", 1.0)],
                             Relationship::EQ,
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
-
         exp.swap_sides().unwrap();
         assert_eq!(3, exp.lhs().len());
         assert_eq!("x", exp.lhs()[0].name());
