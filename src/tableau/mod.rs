@@ -44,6 +44,45 @@ mod tests {
     }
 
     #[test]
+    fn can_get_basic_solution() {
+        let mut column_names1: HashMap<String, usize> = HashMap::new();
+        column_names1.insert("P".to_string(), 0);
+        column_names1.insert("x".to_string(), 1);
+        column_names1.insert("y".to_string(), 2);
+        column_names1.insert("s".to_string(), 3);
+        column_names1.insert("t".to_string(), 4);
+        column_names1.insert("u".to_string(), 5);
+        column_names1.insert("Value".to_string(), 6);
+        let table1_rows = vec![vec![0.0, 0.0, 0.0, 1.0 / 6.0, 0.0, 2.0, 55.0],
+                               vec![0.0, 0.0, 1.0, 1.0 / 3.0, 0.0, -1.0, 10.0],
+                               vec![0.0, 0.0, 0.0, 1.0 / 3.0, 1.0, -3.0, 5.0],
+                               vec![0.0, 1.0, 0.0, -1.0 / 3.0, 0.0, 0.5, 10.0]];
+        let table1 = Table::new(column_names1, table1_rows);
+        assert_eq!(vec![("P".to_string(), 0.0),
+                        ("x".to_string(), 10.0),
+                        ("y".to_string(), 10.0),
+                        ("s".to_string(), 0.0),
+                        ("t".to_string(), 5.0),
+                        ("u".to_string(), 0.0)],
+                   table1.get_basic_solution().unwrap());
+
+        let mut column_names2: HashMap<String, usize> = HashMap::new();
+        column_names2.insert("P".to_string(), 0);
+        column_names2.insert("x".to_string(), 1);
+        column_names2.insert("y".to_string(), 2);
+        column_names2.insert("s".to_string(), 3);
+        column_names2.insert("t".to_string(), 4);
+        column_names2.insert("u".to_string(), 5);
+        column_names2.insert("Value".to_string(), 6);
+        let table2_rows = vec![vec![0.0, 0.0, 0.0, 1.0 / 6.0, 0.0, 2.0, 55.0],
+                               vec![0.0, 0.0, -1.0, 1.0 / 3.0, 0.0, -1.0, 10.0],
+                               vec![0.0, 0.0, 0.0, 1.0 / 3.0, 1.0, -3.0, 5.0],
+                               vec![0.0, 1.0, 0.0, -1.0 / 3.0, 0.0, 0.5, 10.0]];
+        let table2 = Table::new(column_names2, table2_rows);
+        assert_eq!(1, table2.get_basic_solution().err().unwrap());
+    }
+
+    #[test]
     fn can_create_initial_tableau() {
         let e1 =
             Expression::new(vec![new_var("Z", 1.0)],
