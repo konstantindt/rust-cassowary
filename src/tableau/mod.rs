@@ -83,6 +83,54 @@ mod tests {
     }
 
     #[test]
+    fn can_check_is_solution_optimal() {
+        let mut column_names2: HashMap<String, usize> = HashMap::new();
+        column_names2.insert("P".to_string(), 0);
+        column_names2.insert("x".to_string(), 1);
+        column_names2.insert("y".to_string(), 2);
+        column_names2.insert("s".to_string(), 3);
+        column_names2.insert("t".to_string(), 4);
+        column_names2.insert("u".to_string(), 5);
+        column_names2.insert("Value".to_string(), 6);
+        let table2_rows = vec![vec![0.0, 0.0, 0.0, 1.0 / 6.0, 0.0, 2.0, 55.0],
+                               vec![0.0, 0.0, -1.0, 1.0 / 3.0, 0.0, -1.0, 10.0],
+                               vec![0.0, 0.0, 0.0, 1.0 / 3.0, 1.0, -3.0, 5.0],
+                               vec![0.0, 1.0, 0.0, -1.0 / 3.0, 0.0, 0.5, 10.0]];
+        let table2 = Table::new(column_names2, table2_rows);
+        assert_eq!(false, table2.is_solution_optimal());
+
+        let mut column_names2: HashMap<String, usize> = HashMap::new();
+        column_names2.insert("P".to_string(), 0);
+        column_names2.insert("x".to_string(), 1);
+        column_names2.insert("y".to_string(), 2);
+        column_names2.insert("s".to_string(), 3);
+        column_names2.insert("t".to_string(), 4);
+        column_names2.insert("u".to_string(), 5);
+        column_names2.insert("Value".to_string(), 6);
+        let table2_rows = vec![vec![0.0, 0.0, 0.0, 1.0 / 6.0, 0.0, 2.0, 55.0],
+                               vec![0.0, 0.0, -1.0, 1.0 / 3.0, 0.0, -1.0, 10.0],
+                               vec![0.0, 0.0, 0.0, 1.0 / 3.0, 1.0, -3.0, 5.0],
+                               vec![0.0, 1.0, 0.0, 1.0 / 3.0, 0.0, 0.5, 10.0]];
+        let table2 = Table::new(column_names2, table2_rows);
+        assert_eq!(true, table2.is_solution_optimal());
+
+        let mut column_names2: HashMap<String, usize> = HashMap::new();
+        column_names2.insert("P".to_string(), 0);
+        column_names2.insert("x".to_string(), 1);
+        column_names2.insert("y".to_string(), 2);
+        column_names2.insert("s".to_string(), 3);
+        column_names2.insert("t".to_string(), 4);
+        column_names2.insert("u".to_string(), 5);
+        column_names2.insert("Value".to_string(), 6);
+        let table2_rows = vec![vec![0.0, 0.0, 0.0, 1.0 / 6.0, 0.0, 2.0, 55.0],
+                               vec![0.0, 0.0, -1.0, 1.0 / 3.0, 0.0, -1.0, 10.0],
+                               vec![0.0, 0.0, 0.0, 1.0 / 3.0, 1.0, -3.0, 5.0],
+                               vec![0.0, 1.0, 0.0, 1.0 / 3.0, 0.0, 0.5, -10.0]];
+        let table2 = Table::new(column_names2, table2_rows);
+        assert_eq!(true , table2.is_solution_optimal());
+    }
+
+    #[test]
     fn can_create_initial_tableau() {
         let e1 =
             Expression::new(vec![new_var("Z", 1.0)],

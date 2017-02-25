@@ -68,6 +68,15 @@ impl Table {
         Ok(basic_solution)
     }
 
+    pub fn is_solution_optimal(&self) -> bool {
+        for i in 0..self.column_names.len() - 1 {
+            if self.rows[self.rows.len() - 1][i].is_sign_negative() {
+                return false;
+            }
+        }
+        true
+    }
+
     pub fn sub_cell(&mut self, row_index: usize, colunm_index: usize, by: f64) {
         self.rows[row_index][colunm_index] = self.rows[row_index][colunm_index] - by;
     }
