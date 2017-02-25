@@ -5,6 +5,7 @@ pub enum AbstVar {
     Variable { name: String, coefficient: f64 },
     Constant { name: String, value: f64 },
     SlackVar { name: String },
+    SurplusVar { name: String },
 }
 
 impl Hash for AbstVar {
@@ -22,6 +23,8 @@ impl PartialEq for AbstVar {
                 *n1 == *n2,
             (&AbstVar::SlackVar { name: ref n1 }, &AbstVar::SlackVar { name: ref n2 }) =>
                 *n1 == *n2,
+            (&AbstVar::SurplusVar { name: ref n1 }, &AbstVar::SurplusVar { name: ref n2 }) =>
+                *n1 == *n2,
             _ => false,
         }
     }
@@ -34,7 +37,7 @@ impl AbstVar {
         match self {
             &AbstVar::Variable { ref name, .. } => name,
             &AbstVar::Constant { ref name, .. } => name,
-            &AbstVar::SlackVar { ref name } => name,
+            &AbstVar::SlackVar { ref name } | &AbstVar::SurplusVar { ref name } => name,
         }
     }
 
@@ -43,6 +46,7 @@ impl AbstVar {
             &AbstVar::Variable { ref coefficient, .. } => *coefficient,
             &AbstVar::Constant { ref value, .. } => *value,
             &AbstVar::SlackVar { .. } => 1.0,
+            &AbstVar::SurplusVar { .. } => -1.0,
         }
     }
 
@@ -79,4 +83,8 @@ pub fn new_const(n: &str, v: f64) -> AbstVar {
 
 pub fn new_slack_var(n: String) -> AbstVar {
     AbstVar::SlackVar { name: n }
+}
+
+pub fn new_surplus_var(n: String) -> AbstVar {
+    AbstVar::SurplusVar { name: n }
 }

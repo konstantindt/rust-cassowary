@@ -160,7 +160,7 @@ mod tests {
                 assert_eq!(Relationship::EQ, *exp.rel());
                 assert_eq!("y", exp.lhs()[1].name());
                 assert_eq!(3.0, exp.lhs()[1].get_data());
-                assert_eq!("s1", exp.lhs()[2].name());
+                assert_eq!("sl1", exp.lhs()[2].name());
                 assert_eq!("volume", exp.rhs()[0].name());
                 assert_eq!(2300.0, exp.rhs()[0].get_data());
             }
@@ -174,7 +174,7 @@ mod tests {
                 assert_eq!(Relationship::EQ, *exp.rel());
                 assert_eq!("z", exp.lhs()[1].name());
                 assert_eq!(9.0, exp.lhs()[1].get_data());
-                assert_eq!("s2", exp.lhs()[2].name());
+                assert_eq!("sl2", exp.lhs()[2].name());
                 assert_eq!("area", exp.rhs()[0].name());
                 assert_eq!(300.0, exp.rhs()[0].get_data());
             }

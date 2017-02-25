@@ -10,7 +10,7 @@ pub fn transform_leq_rels(constraints: &SystemOfConstraints) {
             Constraint::Regular(ref ref_cell) => {
                 let mut exp = ref_cell.borrow_mut();
                 if *exp.rel() == Relationship::LEQ {
-                    exp.add_lhs(new_slack_var(format!("{}{}", "s", i + 1)));
+                    exp.add_lhs(new_slack_var(format!("{}{}", "sl", i + 1)));
                     exp.set_rel(Relationship::EQ);
                 }
             }

@@ -4,7 +4,7 @@ pub mod expressions;
 
 #[cfg(test)]
 mod tests {
-    use math::variables::{AbstVar, new_var, new_const, new_slack_var};
+    use math::variables::{AbstVar, new_var, new_const, new_slack_var, new_surplus_var};
     use math::relationships::Relationship;
     use math::expressions::Expression;
 
@@ -28,13 +28,21 @@ mod tests {
         assert_eq!("barrels in stock", c1.name());
         assert_eq!(450.0, c1.get_data());
 
-        let s_var = new_slack_var("s1".to_string());
+        let sl_var = new_slack_var("sl1".to_string());
         assert_eq!(AbstVar::SlackVar {
-                       name: "s1".to_string(),
+                       name: "sl1".to_string(),
                    },
-                   s_var);
-       assert_eq!("s1", s_var.name());
-       assert_eq!(1.0, s_var.get_data());
+                   sl_var);
+       assert_eq!("sl1", sl_var.name());
+       assert_eq!(1.0, sl_var.get_data());
+
+       let su_var = new_surplus_var("su1".to_string());
+       assert_eq!(AbstVar::SurplusVar {
+                      name: "su1".to_string(),
+                  },
+                  su_var);
+      assert_eq!("su1", su_var.name());
+      assert_eq!(-1.0, su_var.get_data());
     }
 
     #[test]
