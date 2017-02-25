@@ -141,26 +141,6 @@ mod tests {
         column_names.insert("RHS".to_string(), 5);
         let table = Table::new(column_names, table_rows);
         assert_eq!(1, get_enter_var_column_index(&table));
-        // Make sure no table modification
-        let table_header = table.get_column_names();
-        let table_rows = table.get_rows();
-        assert_eq!(6, table_header.len());
-        assert_eq!(3, table_rows.len());
-        assert!(table_header.contains_key("x1"));
-        assert!(table_header.contains_key("x2"));
-        assert!(table_header.contains_key("x3"));
-        assert!(table_header.contains_key("s1"));
-        assert!(table_header.contains_key("s2"));
-        assert!(table_header.contains_key("RHS"));
-        assert_eq!(0, *table_header.get("x1").unwrap());
-        assert_eq!(1, *table_header.get("x2").unwrap());
-        assert_eq!(2, *table_header.get("x3").unwrap());
-        assert_eq!(3, *table_header.get("s1").unwrap());
-        assert_eq!(4, *table_header.get("s2").unwrap());
-        assert_eq!(5, *table_header.get("RHS").unwrap());
-        assert_eq!(vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0], table_rows[0]);
-        assert_eq!(vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0], table_rows[1]);
-        assert_eq!(vec![-6.0, -14.0, -13.0, 0.0, 0.0, 0.0], table_rows[2]);
     }
 
     #[test]
@@ -178,30 +158,7 @@ mod tests {
         let table = Table::new(column_names, table_rows);
         let enter_var_index = get_enter_var_column_index(&table);
         assert_eq!(0, get_leave_var_row_index(enter_var_index, &table));
-        // Make sure no table modification
-        let table_header = table.get_column_names();
-        let table_rows = table.get_rows();
-        assert_eq!(6, table_header.len());
-        assert_eq!(3, table_rows.len());
-        assert!(table_header.contains_key("x1"));
-        assert!(table_header.contains_key("x2"));
-        assert!(table_header.contains_key("x3"));
-        assert!(table_header.contains_key("s1"));
-        assert!(table_header.contains_key("s2"));
-        assert!(table_header.contains_key("RHS"));
-        assert_eq!(0, *table_header.get("x1").unwrap());
-        assert_eq!(1, *table_header.get("x2").unwrap());
-        assert_eq!(2, *table_header.get("x3").unwrap());
-        assert_eq!(3, *table_header.get("s1").unwrap());
-        assert_eq!(4, *table_header.get("s2").unwrap());
-        assert_eq!(5, *table_header.get("RHS").unwrap());
-        assert_eq!(vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0], table_rows[0]);
-        assert_eq!(vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0], table_rows[1]);
-        assert_eq!(vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0], table_rows[2]);
-    }
 
-    #[test]
-    fn can_get_leave_var_row_index_negative_current() {
         let table_rows: Vec<Vec<f64>> = vec![vec![-0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
                                              vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
                                              vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
@@ -215,30 +172,7 @@ mod tests {
         let table = Table::new(column_names, table_rows);
         let enter_var_index = get_enter_var_column_index(&table);
         assert_eq!(1, get_leave_var_row_index(enter_var_index, &table));
-        // Make sure no table modification
-        let table_header = table.get_column_names();
-        let table_rows = table.get_rows();
-        assert_eq!(6, table_header.len());
-        assert_eq!(3, table_rows.len());
-        assert!(table_header.contains_key("x1"));
-        assert!(table_header.contains_key("x2"));
-        assert!(table_header.contains_key("x3"));
-        assert!(table_header.contains_key("s1"));
-        assert!(table_header.contains_key("s2"));
-        assert!(table_header.contains_key("RHS"));
-        assert_eq!(0, *table_header.get("x1").unwrap());
-        assert_eq!(1, *table_header.get("x2").unwrap());
-        assert_eq!(2, *table_header.get("x3").unwrap());
-        assert_eq!(3, *table_header.get("s1").unwrap());
-        assert_eq!(4, *table_header.get("s2").unwrap());
-        assert_eq!(5, *table_header.get("RHS").unwrap());
-        assert_eq!(vec![-0.5, 2.0, 1.0, 1.0, 0.0, 24.0], table_rows[0]);
-        assert_eq!(vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0], table_rows[1]);
-        assert_eq!(vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0], table_rows[2]);
-    }
 
-    #[test]
-    fn can_get_leave_var_row_index_next_positive() {
         let table_rows: Vec<Vec<f64>> = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
                                              vec![-1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
                                              vec![-1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
@@ -254,28 +188,6 @@ mod tests {
         let table = Table::new(column_names, table_rows);
         let enter_var_index = get_enter_var_column_index(&table);
         assert_eq!(3, get_leave_var_row_index(enter_var_index, &table));
-        // Make sure no table modification
-        let table_header = table.get_column_names();
-        let table_rows = table.get_rows();
-        assert_eq!(6, table_header.len());
-        assert_eq!(5, table_rows.len());
-        assert!(table_header.contains_key("x1"));
-        assert!(table_header.contains_key("x2"));
-        assert!(table_header.contains_key("x3"));
-        assert!(table_header.contains_key("s1"));
-        assert!(table_header.contains_key("s2"));
-        assert!(table_header.contains_key("RHS"));
-        assert_eq!(0, *table_header.get("x1").unwrap());
-        assert_eq!(1, *table_header.get("x2").unwrap());
-        assert_eq!(2, *table_header.get("x3").unwrap());
-        assert_eq!(3, *table_header.get("s1").unwrap());
-        assert_eq!(4, *table_header.get("s2").unwrap());
-        assert_eq!(5, *table_header.get("RHS").unwrap());
-        assert_eq!(vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0], table_rows[0]);
-        assert_eq!(vec![-1.0, 2.0, 4.0, 0.0, 1.0, 60.0], table_rows[1]);
-        assert_eq!(vec![-1.0, 2.0, 4.0, 0.0, 1.0, 60.0], table_rows[2]);
-        assert_eq!(vec![1.0, 2.0, 4.0, 0.0, 1.0, 47.0], table_rows[3]);
-        assert_eq!(vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0], table_rows[4]);
     }
 
     #[test]
@@ -293,26 +205,10 @@ mod tests {
         column_names.insert("Value".to_string(), 5);
         let mut table = Table::new(column_names, table_rows);
         pivot_around(1, 0, &mut table);
-        let table_header = table.get_column_names();
         let table_rows = table.get_rows();
         assert_eq!(vec![0.5, 1.0, (1.0 / 6.0), 0.0, 0.0, 15.0], table_rows[0]);
         assert_eq!(vec![1.5, 0.0, -(1.0 / 6.0), 1.0, 0.0, 20.0], table_rows[1]);
         assert_eq!(vec![0.5, 0.0, -(1.0 / 6.0), 0.0, 1.0, 5.0], table_rows[2]);
         assert_eq!(vec![-1.0, 0.0, 0.5, 0.0, 0.0, 45.0], table_rows[3]);
-        // Make sure no table modification
-        assert_eq!(6, table_header.len());
-        assert_eq!(4, table_rows.len());
-        assert!(table_header.contains_key("x1"));
-        assert!(table_header.contains_key("x2"));
-        assert!(table_header.contains_key("s1"));
-        assert!(table_header.contains_key("s2"));
-        assert!(table_header.contains_key("s3"));
-        assert!(table_header.contains_key("Value"));
-        assert_eq!(0, *table_header.get("x1").unwrap());
-        assert_eq!(1, *table_header.get("x2").unwrap());
-        assert_eq!(2, *table_header.get("s1").unwrap());
-        assert_eq!(3, *table_header.get("s2").unwrap());
-        assert_eq!(4, *table_header.get("s3").unwrap());
-        assert_eq!(5, *table_header.get("Value").unwrap());
     }
 }
