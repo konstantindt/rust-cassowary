@@ -18,7 +18,7 @@ mod tests {
     use tableau::tables::Table;
     use tableau::initials::get_initial_table_from;
     use tableau::enter_vars::{enter_var_pivot_optimal, enter_var_pivot_feasible};
-    use tableau::leave_vars::get_leave_var_row_index;
+    use tableau::leave_vars::leave_var;
     use tableau::pivots::pivot_around;
 
     #[test]
@@ -223,7 +223,7 @@ mod tests {
     }
 
     #[test]
-    fn can_get_leave_var_row_index() {
+    fn can_leave_var_row_index() {
         let mut column_names1: HashMap<String, usize> = HashMap::new();
         column_names1.insert("x1".to_string(), 0);
         column_names1.insert("x2".to_string(), 1);
@@ -236,7 +236,7 @@ mod tests {
                                vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
         let table1 = Table::new(column_names1, table1_rows);
         let enter_var_index1 = enter_var_pivot_optimal(&table1);
-        assert_eq!(0, get_leave_var_row_index(enter_var_index1, &table1));
+        assert_eq!(0, leave_var(enter_var_index1, &table1));
 
         let mut column_names2: HashMap<String, usize> = HashMap::new();
         column_names2.insert("x1".to_string(), 0);
@@ -250,7 +250,7 @@ mod tests {
                                vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
         let table2 = Table::new(column_names2, table2_rows);
         let enter_var_index2 = enter_var_pivot_optimal(&table2);
-        assert_eq!(1, get_leave_var_row_index(enter_var_index2, &table2));
+        assert_eq!(1, leave_var(enter_var_index2, &table2));
 
         let mut column_names3: HashMap<String, usize> = HashMap::new();
         column_names3.insert("x1".to_string(), 0);
@@ -266,7 +266,7 @@ mod tests {
                                vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
         let table3 = Table::new(column_names3, table3_rows);
         let enter_var_index3 = enter_var_pivot_optimal(&table3);
-        assert_eq!(3, get_leave_var_row_index(enter_var_index3, &table3));
+        assert_eq!(3, leave_var(enter_var_index3, &table3));
     }
 
     #[test]

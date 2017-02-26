@@ -1,6 +1,6 @@
 use tableau::tables::Table;
 
-pub fn get_leave_var_row_index(enter_var_index: usize, table: &Table) -> usize {
+pub fn leave_var(enter_var_index: usize, table: &Table) -> usize {
     let table_rows = table.get_rows();
     let last_column_index = table.get_column_names().len() - 1;
     // Pick according to the smallest positive ratio of the entry in the
