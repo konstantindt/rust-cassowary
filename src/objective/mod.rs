@@ -5,14 +5,12 @@ pub mod solvers;
 
 #[cfg(test)]
 mod tests {
-    use std::cell::RefCell;
     use math::variables::{AbstVar, new_var, new_const};
     use math::relationships::Relationship;
     use math::expressions::Expression;
     use objective::problems::ProblemType;
     use objective::functions::Function;
-    use objective::constraints::Constraint;
-    use objective::constraints::SystemOfConstraints;
+    use objective::constraints::{Constraint, new_reg_con, new_non_neg_con, SystemOfConstraints};
     use objective::solvers::{transform_constraint_rels_to_eq, rearrange_fun_eq_zero};
 
     #[test]
@@ -87,7 +85,7 @@ mod tests {
         let exp = Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0)],
                                   Relationship::LEQ,
                                   vec![new_const("volume", 2300.0)]);
-        let c1 = Constraint::Regular(RefCell::new(exp));
+        let c1 = new_reg_con(exp);
         match c1 {
             Constraint::Regular(ref_cell) => {
                 let exp = ref_cell.borrow();
@@ -102,7 +100,7 @@ mod tests {
             _ => panic!("Unexpected variant."),
         }
 
-        let c2 = Constraint::NonNegative(new_var("x", 2.0));
+        let c2 = new_non_neg_con(new_var("x", 2.0));
         match c2 {
             Constraint::NonNegative(abst_var) => {
                 assert_eq!("x", abst_var.name());
@@ -117,8 +115,8 @@ mod tests {
         let exp = Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0)],
                                   Relationship::LEQ,
                                   vec![new_const("volume", 2300.0)]);
-        let c1 = Constraint::Regular(RefCell::new(exp));
-        let c2 = Constraint::NonNegative(new_var("x", 2.0));
+        let c1 = new_reg_con(exp);
+        let c2 = new_non_neg_con(new_var("x", 2.0));
         let s = SystemOfConstraints::new(vec![c1, c2]);
         for constraint in s.system() {
             match constraint {
@@ -151,10 +149,10 @@ mod tests {
         let exp3 = Expression::new(vec![new_var("u", 61.0), new_var("t", 19.0)],
                                    Relationship::GEQ,
                                    vec![new_const("hyperplane", -3000.0)]);
-        let c1 = Constraint::Regular(RefCell::new(exp1));
-        let c2 = Constraint::Regular(RefCell::new(exp2));
-        let c3 = Constraint::Regular(RefCell::new(exp3));
-        let c4 = Constraint::NonNegative(new_var("x", 2.0));
+        let c1 = new_reg_con(exp1);
+        let c2 = new_reg_con(exp2);
+        let c3 = new_reg_con(exp3);
+        let c4 = new_non_neg_con(new_var("x", 2.0));
         let s = SystemOfConstraints::new(vec![c1, c2, c3, c4]);
         transform_constraint_rels_to_eq(&s);
         match s.system()[0] {

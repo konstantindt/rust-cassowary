@@ -12,13 +12,19 @@ pub struct SystemOfConstraints {
 }
 
 impl SystemOfConstraints {
-    pub fn new(c: Vec<Constraint>) ->  SystemOfConstraints {
-        SystemOfConstraints {
-            constraints: c,
-        }
+    pub fn new(c: Vec<Constraint>) -> SystemOfConstraints {
+        SystemOfConstraints { constraints: c }
     }
 
     pub fn system(&self) -> &Vec<Constraint> {
         &self.constraints
     }
+}
+
+pub fn new_reg_con(exp: Expression) -> Constraint {
+    Constraint::Regular(RefCell::new(exp))
+}
+
+pub fn new_non_neg_con(var: AbstVar) -> Constraint {
+    Constraint::NonNegative(var)
 }
