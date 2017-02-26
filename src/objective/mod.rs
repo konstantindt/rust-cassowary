@@ -6,14 +6,14 @@ pub mod solvers;
 #[cfg(test)]
 mod tests {
     use std::cell::RefCell;
-    use math::variables::{new_var, new_const};
+    use math::variables::{AbstVar, new_var, new_const};
     use math::relationships::Relationship;
     use math::expressions::Expression;
     use objective::problems::ProblemType;
     use objective::functions::Function;
     use objective::constraints::Constraint;
     use objective::constraints::SystemOfConstraints;
-    use objective::solvers::{transform_leq_rels, rearrange_fun_eq_zero};
+    use objective::solvers::{transform_constraint_rels_to_eq, rearrange_fun_eq_zero};
 
     #[test]
     fn can_create_problem_types() {
@@ -140,18 +140,22 @@ mod tests {
     }
 
     #[test]
-    fn can_transform_leq_rels() {
+    fn can_transform_constraint_rels_to_eq() {
         let e1: Expression = Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0)],
                                              Relationship::LEQ,
                                              vec![new_const("volume", 2300.0)]);
         let e2: Expression = Expression::new(vec![new_var("w", 6.0), new_var("z", 9.0)],
-                                             Relationship::LEQ,
+                                             Relationship::GEQ,
                                              vec![new_const("area", 300.0)]);
+        let e3: Expression = Expression::new(vec![new_var("u", 61.0), new_var("t", 19.0)],
+                                             Relationship::GEQ,
+                                             vec![new_const("hyperplane", -3000.0)]);
         let c1: Constraint = Constraint::Regular(RefCell::new(e1));
         let c2: Constraint = Constraint::Regular(RefCell::new(e2));
-        let c3: Constraint = Constraint::NonNegative(new_var("x", 2.0));
-        let s: SystemOfConstraints = SystemOfConstraints::new(vec![c1, c2, c3]);
-        transform_leq_rels(&s);
+        let c3: Constraint = Constraint::Regular(RefCell::new(e3));
+        let c4: Constraint = Constraint::NonNegative(new_var("x", 2.0));
+        let s: SystemOfConstraints = SystemOfConstraints::new(vec![c1, c2, c3, c4]);
+        transform_constraint_rels_to_eq(&s);
         match s.system()[0] {
             Constraint::Regular(ref ref_cell) => {
                 let exp = ref_cell.borrow();
@@ -160,7 +164,7 @@ mod tests {
                 assert_eq!(Relationship::EQ, *exp.rel());
                 assert_eq!("y", exp.lhs()[1].name());
                 assert_eq!(3.0, exp.lhs()[1].get_data());
-                assert_eq!("sl1", exp.lhs()[2].name());
+                assert_eq!(AbstVar::SlackVar { name: "sl1".to_string() }, exp.lhs()[2]);
                 assert_eq!("volume", exp.rhs()[0].name());
                 assert_eq!(2300.0, exp.rhs()[0].get_data());
             }
@@ -174,13 +178,28 @@ mod tests {
                 assert_eq!(Relationship::EQ, *exp.rel());
                 assert_eq!("z", exp.lhs()[1].name());
                 assert_eq!(9.0, exp.lhs()[1].get_data());
-                assert_eq!("sl2", exp.lhs()[2].name());
+                assert_eq!(AbstVar::SurplusVar { name: "su2".to_string() },
+                           exp.lhs()[2]);
                 assert_eq!("area", exp.rhs()[0].name());
                 assert_eq!(300.0, exp.rhs()[0].get_data());
             }
             _ => panic!("Unexpected variant in this program logic."),
         };
         match s.system()[2] {
+            Constraint::Regular(ref ref_cell) => {
+                let exp = ref_cell.borrow();
+                assert_eq!("u", exp.lhs()[0].name());
+                assert_eq!(-61.0, exp.lhs()[0].get_data());
+                assert_eq!(Relationship::EQ, *exp.rel());
+                assert_eq!("t", exp.lhs()[1].name());
+                assert_eq!(-19.0, exp.lhs()[1].get_data());
+                assert_eq!(AbstVar::SlackVar { name: "sl3".to_string() }, exp.lhs()[2]);
+                assert_eq!("hyperplane", exp.rhs()[0].name());
+                assert_eq!(3000.0, exp.rhs()[0].get_data());
+            }
+            _ => panic!("Unexpected variant in this program logic."),
+        };
+        match s.system()[3] {
             Constraint::NonNegative(ref abst_var) => {
                 assert_eq!("x", abst_var.name());
                 assert_eq!(2.0, abst_var.get_data());

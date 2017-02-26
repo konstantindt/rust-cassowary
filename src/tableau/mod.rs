@@ -14,7 +14,7 @@ mod tests {
     use objective::problems::ProblemType;
     use objective::functions::Function;
     use objective::constraints::{Constraint, SystemOfConstraints};
-    use objective::solvers::{transform_leq_rels, rearrange_fun_eq_zero};
+    use objective::solvers::{transform_constraint_rels_to_eq, rearrange_fun_eq_zero};
     use tableau::tables::Table;
     use tableau::initials::get_initial_table_from;
     use tableau::enter_vars::{enter_var_pivot_optimal, enter_var_pivot_feasible};
@@ -150,7 +150,7 @@ mod tests {
         let c4 = Constraint::NonNegative(new_var("x2", 1.0));
         let c5 = Constraint::NonNegative(new_var("x3", 1.0));
         let system = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
-        transform_leq_rels(&system);
+        transform_constraint_rels_to_eq(&system);
         let table = get_initial_table_from(&f, &system);
         let table_header = table.get_column_names();
         let table_rows = table.get_rows();
