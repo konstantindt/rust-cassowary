@@ -22,7 +22,7 @@ impl Table {
         &self.rows
     }
 
-    pub fn get_basic_solution(&self) -> Result<Vec<(String, f64)>, usize> {
+    pub fn get_basic_solution(&self) -> Result<Vec<(String, f64)>, (usize, usize)> {
         let mut basic_solution = Vec::with_capacity(self.column_names.len());
         // Note: ignore RHS column.
         'columns: for i in 0..self.column_names.len() - 1 {
@@ -54,7 +54,7 @@ impl Table {
                 // is not feasable...
                 if basic_variable_value.is_sign_negative() {
                     // ... report the row where it happened.
-                    return Err(one_entry_index);
+                    return Err((one_entry_index, i));
                 } else {
                     // ... if not continue generating the solution.
                     basic_solution.push((get_name_of_index(&self.column_names, i).unwrap(),

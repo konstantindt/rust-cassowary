@@ -79,7 +79,7 @@ mod tests {
                                vec![0.0, 0.0, 0.0, 1.0 / 3.0, 1.0, -3.0, 5.0],
                                vec![0.0, 1.0, 0.0, -1.0 / 3.0, 0.0, 0.5, 10.0]];
         let table2 = Table::new(column_names2, table2_rows);
-        assert_eq!(1, table2.get_basic_solution().err().unwrap());
+        assert_eq!((1, 2), table2.get_basic_solution().err().unwrap());
     }
 
     #[test]
