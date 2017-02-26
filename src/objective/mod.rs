@@ -17,19 +17,19 @@ mod tests {
 
     #[test]
     fn can_create_problem_types() {
-        let p_t_max: ProblemType = ProblemType::MAX;
+        let p_t_max = ProblemType::MAX;
         assert_eq!(ProblemType::MAX, p_t_max);
-        let p_t_min: ProblemType = ProblemType::MIN;
+        let p_t_min = ProblemType::MIN;
         assert_eq!(ProblemType::MIN, p_t_min);
     }
 
     #[test]
     fn can_create_functions() {
-        let e1: Expression =
+        let e1 =
             Expression::new(vec![new_var("Z", 1.0)],
                             Relationship::EQ,
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
-        let f1: Function = Function::new(e1, ProblemType::MAX);
+        let f1 = Function::new(e1, ProblemType::MAX);
         let exp1 = f1.exp().borrow();
         assert_eq!(ProblemType::MAX, *f1.p_type());
         assert_eq!("Z", exp1.lhs()[0].name());
@@ -53,11 +53,11 @@ mod tests {
         assert_eq!("bonus", exp1_max.rhs()[2].name());
         assert_eq!(1000.0, exp1_max.rhs()[2].get_data());
 
-        let e2: Expression =
+        let e2 =
             Expression::new(vec![new_var("Z", 1.0)],
                             Relationship::EQ,
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
-        let f2: Function = Function::new(e2, ProblemType::MIN);
+        let f2 = Function::new(e2, ProblemType::MIN);
         let exp2 = f2.exp().borrow();
         assert_eq!(ProblemType::MIN, *f2.p_type());
         assert_eq!("Z", exp2.lhs()[0].name());
@@ -84,10 +84,10 @@ mod tests {
 
     #[test]
     fn can_create_constraints() {
-        let e: Expression = Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0)],
-                                            Relationship::LEQ,
-                                            vec![new_const("volume", 2300.0)]);
-        let c1: Constraint = Constraint::Regular(RefCell::new(e));
+        let exp = Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0)],
+                                  Relationship::LEQ,
+                                  vec![new_const("volume", 2300.0)]);
+        let c1 = Constraint::Regular(RefCell::new(exp));
         match c1 {
             Constraint::Regular(ref_cell) => {
                 let exp = ref_cell.borrow();
@@ -101,7 +101,8 @@ mod tests {
             }
             _ => panic!("Unexpected variant."),
         }
-        let c2: Constraint = Constraint::NonNegative(new_var("x", 2.0));
+
+        let c2 = Constraint::NonNegative(new_var("x", 2.0));
         match c2 {
             Constraint::NonNegative(abst_var) => {
                 assert_eq!("x", abst_var.name());
@@ -113,12 +114,12 @@ mod tests {
 
     #[test]
     fn can_create_system_of_constraints() {
-        let e: Expression = Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0)],
-                                            Relationship::LEQ,
-                                            vec![new_const("volume", 2300.0)]);
-        let c1: Constraint = Constraint::Regular(RefCell::new(e));
-        let c2: Constraint = Constraint::NonNegative(new_var("x", 2.0));
-        let s: SystemOfConstraints = SystemOfConstraints::new(vec![c1, c2]);
+        let exp = Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0)],
+                                  Relationship::LEQ,
+                                  vec![new_const("volume", 2300.0)]);
+        let c1 = Constraint::Regular(RefCell::new(exp));
+        let c2 = Constraint::NonNegative(new_var("x", 2.0));
+        let s = SystemOfConstraints::new(vec![c1, c2]);
         for constraint in s.system() {
             match constraint {
                 &Constraint::Regular(ref ref_cell) => {
@@ -141,20 +142,20 @@ mod tests {
 
     #[test]
     fn can_transform_constraint_rels_to_eq() {
-        let e1: Expression = Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0)],
-                                             Relationship::LEQ,
-                                             vec![new_const("volume", 2300.0)]);
-        let e2: Expression = Expression::new(vec![new_var("w", 6.0), new_var("z", 9.0)],
-                                             Relationship::GEQ,
-                                             vec![new_const("area", 300.0)]);
-        let e3: Expression = Expression::new(vec![new_var("u", 61.0), new_var("t", 19.0)],
-                                             Relationship::GEQ,
-                                             vec![new_const("hyperplane", -3000.0)]);
-        let c1: Constraint = Constraint::Regular(RefCell::new(e1));
-        let c2: Constraint = Constraint::Regular(RefCell::new(e2));
-        let c3: Constraint = Constraint::Regular(RefCell::new(e3));
-        let c4: Constraint = Constraint::NonNegative(new_var("x", 2.0));
-        let s: SystemOfConstraints = SystemOfConstraints::new(vec![c1, c2, c3, c4]);
+        let exp1 = Expression::new(vec![new_var("x", 2.0), new_var("y", 3.0)],
+                                   Relationship::LEQ,
+                                   vec![new_const("volume", 2300.0)]);
+        let exp2 = Expression::new(vec![new_var("w", 6.0), new_var("z", 9.0)],
+                                   Relationship::GEQ,
+                                   vec![new_const("area", 300.0)]);
+        let exp3 = Expression::new(vec![new_var("u", 61.0), new_var("t", 19.0)],
+                                   Relationship::GEQ,
+                                   vec![new_const("hyperplane", -3000.0)]);
+        let c1 = Constraint::Regular(RefCell::new(exp1));
+        let c2 = Constraint::Regular(RefCell::new(exp2));
+        let c3 = Constraint::Regular(RefCell::new(exp3));
+        let c4 = Constraint::NonNegative(new_var("x", 2.0));
+        let s = SystemOfConstraints::new(vec![c1, c2, c3, c4]);
         transform_constraint_rels_to_eq(&s);
         match s.system()[0] {
             Constraint::Regular(ref ref_cell) => {
@@ -210,11 +211,11 @@ mod tests {
 
     #[test]
     fn can_rearrange_fun_eq_zero() {
-        let e1: Expression =
+        let e1 =
             Expression::new(vec![new_var("Z", 1.0)],
                             Relationship::EQ,
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
-        let mut f1: Function = Function::new(e1, ProblemType::MAX);
+        let mut f1 = Function::new(e1, ProblemType::MAX);
         rearrange_fun_eq_zero(&mut f1);
         let exp1 = f1.exp().borrow();
         assert_eq!(ProblemType::MAX, *f1.p_type());
@@ -243,11 +244,11 @@ mod tests {
         assert_eq!("Z", exp1_max.lhs()[3].name());
         assert_eq!(1.0, exp1_max.lhs()[3].get_data());
 
-        let e2: Expression =
+        let e2 =
             Expression::new(vec![new_var("Z", 1.0)],
                             Relationship::EQ,
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
-        let mut f2: Function = Function::new(e2, ProblemType::MIN);
+        let mut f2 = Function::new(e2, ProblemType::MIN);
         rearrange_fun_eq_zero(&mut f2);
         let exp2 = f2.exp().borrow();
         assert_eq!(ProblemType::MIN, *f2.p_type());
