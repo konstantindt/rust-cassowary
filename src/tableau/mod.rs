@@ -17,7 +17,7 @@ mod tests {
     use objective::solvers::{transform_leq_rels, rearrange_fun_eq_zero};
     use tableau::tables::Table;
     use tableau::initials::get_initial_table_from;
-    use tableau::enter_vars::get_enter_var_column_index;
+    use tableau::enter_vars::{enter_var_pivot_optimal, enter_var_pivot_feasible};
     use tableau::leave_vars::get_leave_var_row_index;
     use tableau::pivots::pivot_around;
 
@@ -127,7 +127,7 @@ mod tests {
                                vec![0.0, 0.0, 0.0, 1.0 / 3.0, 1.0, -3.0, 5.0],
                                vec![0.0, 1.0, 0.0, 1.0 / 3.0, 0.0, 0.5, -10.0]];
         let table2 = Table::new(column_names2, table2_rows);
-        assert_eq!(true , table2.is_solution_optimal());
+        assert_eq!(true, table2.is_solution_optimal());
     }
 
     #[test]
@@ -176,7 +176,7 @@ mod tests {
     }
 
     #[test]
-    fn can_get_enter_var_column_index() {
+    fn can_enter_var_pivot_optimal() {
         let table_rows: Vec<Vec<f64>> = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
                                              vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
                                              vec![-6.0, -14.0, -13.0, 0.0, 0.0, 0.0]];
@@ -188,7 +188,38 @@ mod tests {
         column_names.insert("s2".to_string(), 4);
         column_names.insert("RHS".to_string(), 5);
         let table = Table::new(column_names, table_rows);
-        assert_eq!(1, get_enter_var_column_index(&table));
+        assert_eq!(1, enter_var_pivot_optimal(&table));
+    }
+
+    #[test]
+    fn can_enter_var_pivot_feasible() {
+        let mut column_names: HashMap<String, usize> = HashMap::new();
+        column_names.insert("x1".to_string(), 0);
+        column_names.insert("x2".to_string(), 1);
+        column_names.insert("x3".to_string(), 2);
+        column_names.insert("s1".to_string(), 3);
+        column_names.insert("s2".to_string(), 4);
+        column_names.insert("RHS".to_string(), 5);
+        column_names.insert("Value".to_string(), 6);
+        let table_rows = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
+                              vec![-1.0, 0.0, 4.0, 0.0, 1.0, 60.0],
+                              vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
+        let table = Table::new(column_names, table_rows);
+        assert_eq!(2, enter_var_pivot_feasible(&table, 1, 4).unwrap());
+
+        let mut column_names: HashMap<String, usize> = HashMap::new();
+        column_names.insert("x1".to_string(), 0);
+        column_names.insert("x2".to_string(), 1);
+        column_names.insert("x3".to_string(), 2);
+        column_names.insert("s1".to_string(), 3);
+        column_names.insert("s2".to_string(), 4);
+        column_names.insert("RHS".to_string(), 5);
+        column_names.insert("Value".to_string(), 6);
+        let table_rows = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
+                              vec![-1.0, 0.0, -4.0, 0.0, 1.0, 60.0],
+                              vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
+        let table = Table::new(column_names, table_rows);
+        assert_eq!(true, enter_var_pivot_feasible(&table, 1, 4).is_err());
     }
 
     #[test]
@@ -204,7 +235,7 @@ mod tests {
         column_names.insert("s2".to_string(), 4);
         column_names.insert("RHS".to_string(), 5);
         let table = Table::new(column_names, table_rows);
-        let enter_var_index = get_enter_var_column_index(&table);
+        let enter_var_index = enter_var_pivot_optimal(&table);
         assert_eq!(0, get_leave_var_row_index(enter_var_index, &table));
 
         let table_rows: Vec<Vec<f64>> = vec![vec![-0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
@@ -218,7 +249,7 @@ mod tests {
         column_names.insert("s2".to_string(), 4);
         column_names.insert("RHS".to_string(), 5);
         let table = Table::new(column_names, table_rows);
-        let enter_var_index = get_enter_var_column_index(&table);
+        let enter_var_index = enter_var_pivot_optimal(&table);
         assert_eq!(1, get_leave_var_row_index(enter_var_index, &table));
 
         let table_rows: Vec<Vec<f64>> = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
@@ -234,7 +265,7 @@ mod tests {
         column_names.insert("s2".to_string(), 4);
         column_names.insert("RHS".to_string(), 5);
         let table = Table::new(column_names, table_rows);
-        let enter_var_index = get_enter_var_column_index(&table);
+        let enter_var_index = enter_var_pivot_optimal(&table);
         assert_eq!(3, get_leave_var_row_index(enter_var_index, &table));
     }
 
