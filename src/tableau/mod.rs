@@ -84,20 +84,20 @@ mod tests {
 
     #[test]
     fn can_check_is_solution_optimal() {
-        let mut column_names2: HashMap<String, usize> = HashMap::new();
-        column_names2.insert("P".to_string(), 0);
-        column_names2.insert("x".to_string(), 1);
-        column_names2.insert("y".to_string(), 2);
-        column_names2.insert("s".to_string(), 3);
-        column_names2.insert("t".to_string(), 4);
-        column_names2.insert("u".to_string(), 5);
-        column_names2.insert("Value".to_string(), 6);
-        let table2_rows = vec![vec![0.0, 0.0, 0.0, 1.0 / 6.0, 0.0, 2.0, 55.0],
+        let mut column_names1: HashMap<String, usize> = HashMap::new();
+        column_names1.insert("P".to_string(), 0);
+        column_names1.insert("x".to_string(), 1);
+        column_names1.insert("y".to_string(), 2);
+        column_names1.insert("s".to_string(), 3);
+        column_names1.insert("t".to_string(), 4);
+        column_names1.insert("u".to_string(), 5);
+        column_names1.insert("Value".to_string(), 6);
+        let table1_rows = vec![vec![0.0, 0.0, 0.0, 1.0 / 6.0, 0.0, 2.0, 55.0],
                                vec![0.0, 0.0, -1.0, 1.0 / 3.0, 0.0, -1.0, 10.0],
                                vec![0.0, 0.0, 0.0, 1.0 / 3.0, 1.0, -3.0, 5.0],
                                vec![0.0, 1.0, 0.0, -1.0 / 3.0, 0.0, 0.5, 10.0]];
-        let table2 = Table::new(column_names2, table2_rows);
-        assert_eq!(false, table2.is_solution_optimal());
+        let table1 = Table::new(column_names1, table1_rows);
+        assert_eq!(false, table1.is_solution_optimal());
 
         let mut column_names2: HashMap<String, usize> = HashMap::new();
         column_names2.insert("P".to_string(), 0);
@@ -114,20 +114,20 @@ mod tests {
         let table2 = Table::new(column_names2, table2_rows);
         assert_eq!(true, table2.is_solution_optimal());
 
-        let mut column_names2: HashMap<String, usize> = HashMap::new();
-        column_names2.insert("P".to_string(), 0);
-        column_names2.insert("x".to_string(), 1);
-        column_names2.insert("y".to_string(), 2);
-        column_names2.insert("s".to_string(), 3);
-        column_names2.insert("t".to_string(), 4);
-        column_names2.insert("u".to_string(), 5);
-        column_names2.insert("Value".to_string(), 6);
-        let table2_rows = vec![vec![0.0, 0.0, 0.0, 1.0 / 6.0, 0.0, 2.0, 55.0],
+        let mut column_names3: HashMap<String, usize> = HashMap::new();
+        column_names3.insert("P".to_string(), 0);
+        column_names3.insert("x".to_string(), 1);
+        column_names3.insert("y".to_string(), 2);
+        column_names3.insert("s".to_string(), 3);
+        column_names3.insert("t".to_string(), 4);
+        column_names3.insert("u".to_string(), 5);
+        column_names3.insert("Value".to_string(), 6);
+        let table3_rows = vec![vec![0.0, 0.0, 0.0, 1.0 / 6.0, 0.0, 2.0, 55.0],
                                vec![0.0, 0.0, -1.0, 1.0 / 3.0, 0.0, -1.0, 10.0],
                                vec![0.0, 0.0, 0.0, 1.0 / 3.0, 1.0, -3.0, 5.0],
                                vec![0.0, 1.0, 0.0, 1.0 / 3.0, 0.0, 0.5, -10.0]];
-        let table2 = Table::new(column_names2, table2_rows);
-        assert_eq!(true, table2.is_solution_optimal());
+        let table3 = Table::new(column_names3, table3_rows);
+        assert_eq!(true, table3.is_solution_optimal());
     }
 
     #[test]
@@ -177,9 +177,6 @@ mod tests {
 
     #[test]
     fn can_enter_var_pivot_optimal() {
-        let table_rows: Vec<Vec<f64>> = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
-                                             vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
-                                             vec![-6.0, -14.0, -13.0, 0.0, 0.0, 0.0]];
         let mut column_names: HashMap<String, usize> = HashMap::new();
         column_names.insert("x1".to_string(), 0);
         column_names.insert("x2".to_string(), 1);
@@ -187,94 +184,93 @@ mod tests {
         column_names.insert("s1".to_string(), 3);
         column_names.insert("s2".to_string(), 4);
         column_names.insert("RHS".to_string(), 5);
+        let table_rows = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
+                              vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
+                              vec![-6.0, -14.0, -13.0, 0.0, 0.0, 0.0]];
         let table = Table::new(column_names, table_rows);
         assert_eq!(1, enter_var_pivot_optimal(&table));
     }
 
     #[test]
     fn can_enter_var_pivot_feasible() {
-        let mut column_names: HashMap<String, usize> = HashMap::new();
-        column_names.insert("x1".to_string(), 0);
-        column_names.insert("x2".to_string(), 1);
-        column_names.insert("x3".to_string(), 2);
-        column_names.insert("s1".to_string(), 3);
-        column_names.insert("s2".to_string(), 4);
-        column_names.insert("RHS".to_string(), 5);
-        column_names.insert("Value".to_string(), 6);
-        let table_rows = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
-                              vec![-1.0, 0.0, 4.0, 0.0, 1.0, 60.0],
-                              vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
-        let table = Table::new(column_names, table_rows);
-        assert_eq!(2, enter_var_pivot_feasible(&table, 1, 4).unwrap());
+        let mut column_names1: HashMap<String, usize> = HashMap::new();
+        column_names1.insert("x1".to_string(), 0);
+        column_names1.insert("x2".to_string(), 1);
+        column_names1.insert("x3".to_string(), 2);
+        column_names1.insert("s1".to_string(), 3);
+        column_names1.insert("s2".to_string(), 4);
+        column_names1.insert("RHS".to_string(), 5);
+        column_names1.insert("Value".to_string(), 6);
+        let table1_rows = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
+                               vec![-1.0, 0.0, 4.0, 0.0, 1.0, 60.0],
+                               vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
+        let table1 = Table::new(column_names1, table1_rows);
+        assert_eq!(2, enter_var_pivot_feasible(&table1, 1, 4).unwrap());
 
-        let mut column_names: HashMap<String, usize> = HashMap::new();
-        column_names.insert("x1".to_string(), 0);
-        column_names.insert("x2".to_string(), 1);
-        column_names.insert("x3".to_string(), 2);
-        column_names.insert("s1".to_string(), 3);
-        column_names.insert("s2".to_string(), 4);
-        column_names.insert("RHS".to_string(), 5);
-        column_names.insert("Value".to_string(), 6);
-        let table_rows = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
-                              vec![-1.0, 0.0, -4.0, 0.0, 1.0, 60.0],
-                              vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
-        let table = Table::new(column_names, table_rows);
-        assert_eq!(true, enter_var_pivot_feasible(&table, 1, 4).is_err());
+        let mut column_names2: HashMap<String, usize> = HashMap::new();
+        column_names2.insert("x1".to_string(), 0);
+        column_names2.insert("x2".to_string(), 1);
+        column_names2.insert("x3".to_string(), 2);
+        column_names2.insert("s1".to_string(), 3);
+        column_names2.insert("s2".to_string(), 4);
+        column_names2.insert("RHS".to_string(), 5);
+        column_names2.insert("Value".to_string(), 6);
+        let table2_rows = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
+                               vec![-1.0, 0.0, -4.0, 0.0, 1.0, 60.0],
+                               vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
+        let table2 = Table::new(column_names2, table2_rows);
+        assert_eq!(true, enter_var_pivot_feasible(&table2, 1, 4).is_err());
     }
 
     #[test]
     fn can_get_leave_var_row_index() {
-        let table_rows: Vec<Vec<f64>> = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
-                                             vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
-                                             vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
-        let mut column_names: HashMap<String, usize> = HashMap::new();
-        column_names.insert("x1".to_string(), 0);
-        column_names.insert("x2".to_string(), 1);
-        column_names.insert("x3".to_string(), 2);
-        column_names.insert("s1".to_string(), 3);
-        column_names.insert("s2".to_string(), 4);
-        column_names.insert("RHS".to_string(), 5);
-        let table = Table::new(column_names, table_rows);
-        let enter_var_index = enter_var_pivot_optimal(&table);
-        assert_eq!(0, get_leave_var_row_index(enter_var_index, &table));
+        let mut column_names1: HashMap<String, usize> = HashMap::new();
+        column_names1.insert("x1".to_string(), 0);
+        column_names1.insert("x2".to_string(), 1);
+        column_names1.insert("x3".to_string(), 2);
+        column_names1.insert("s1".to_string(), 3);
+        column_names1.insert("s2".to_string(), 4);
+        column_names1.insert("RHS".to_string(), 5);
+        let table1_rows = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
+                               vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
+                               vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
+        let table1 = Table::new(column_names1, table1_rows);
+        let enter_var_index1 = enter_var_pivot_optimal(&table1);
+        assert_eq!(0, get_leave_var_row_index(enter_var_index1, &table1));
 
-        let table_rows: Vec<Vec<f64>> = vec![vec![-0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
-                                             vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
-                                             vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
-        let mut column_names: HashMap<String, usize> = HashMap::new();
-        column_names.insert("x1".to_string(), 0);
-        column_names.insert("x2".to_string(), 1);
-        column_names.insert("x3".to_string(), 2);
-        column_names.insert("s1".to_string(), 3);
-        column_names.insert("s2".to_string(), 4);
-        column_names.insert("RHS".to_string(), 5);
-        let table = Table::new(column_names, table_rows);
-        let enter_var_index = enter_var_pivot_optimal(&table);
-        assert_eq!(1, get_leave_var_row_index(enter_var_index, &table));
+        let mut column_names2: HashMap<String, usize> = HashMap::new();
+        column_names2.insert("x1".to_string(), 0);
+        column_names2.insert("x2".to_string(), 1);
+        column_names2.insert("x3".to_string(), 2);
+        column_names2.insert("s1".to_string(), 3);
+        column_names2.insert("s2".to_string(), 4);
+        column_names2.insert("RHS".to_string(), 5);
+        let table2_rows = vec![vec![-0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
+                               vec![1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
+                               vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
+        let table2 = Table::new(column_names2, table2_rows);
+        let enter_var_index2 = enter_var_pivot_optimal(&table2);
+        assert_eq!(1, get_leave_var_row_index(enter_var_index2, &table2));
 
-        let table_rows: Vec<Vec<f64>> = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
-                                             vec![-1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
-                                             vec![-1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
-                                             vec![1.0, 2.0, 4.0, 0.0, 1.0, 47.0],
-                                             vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
-        let mut column_names: HashMap<String, usize> = HashMap::new();
-        column_names.insert("x1".to_string(), 0);
-        column_names.insert("x2".to_string(), 1);
-        column_names.insert("x3".to_string(), 2);
-        column_names.insert("s1".to_string(), 3);
-        column_names.insert("s2".to_string(), 4);
-        column_names.insert("RHS".to_string(), 5);
-        let table = Table::new(column_names, table_rows);
-        let enter_var_index = enter_var_pivot_optimal(&table);
-        assert_eq!(3, get_leave_var_row_index(enter_var_index, &table));
+        let mut column_names3: HashMap<String, usize> = HashMap::new();
+        column_names3.insert("x1".to_string(), 0);
+        column_names3.insert("x2".to_string(), 1);
+        column_names3.insert("x3".to_string(), 2);
+        column_names3.insert("s1".to_string(), 3);
+        column_names3.insert("s2".to_string(), 4);
+        column_names3.insert("RHS".to_string(), 5);
+        let table3_rows = vec![vec![0.5, 2.0, 1.0, 1.0, 0.0, 24.0],
+                               vec![-1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
+                               vec![-1.0, 2.0, 4.0, 0.0, 1.0, 60.0],
+                               vec![1.0, 2.0, 4.0, 0.0, 1.0, 47.0],
+                               vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
+        let table3 = Table::new(column_names3, table3_rows);
+        let enter_var_index3 = enter_var_pivot_optimal(&table3);
+        assert_eq!(3, get_leave_var_row_index(enter_var_index3, &table3));
     }
 
     #[test]
     fn can_pivot_around() {
-        let table_rows: Vec<Vec<f64>> = vec![vec![3.0, 6.0, 1.0, 0.0, 0.0, 90.0],
-                                             vec![2.0, 1.0, 0.0, 1.0, 0.0, 35.0],
-                                             vec![1.0, 1.0, 0.0, 0.0, 1.0, 20.0],
-                                             vec![-2.5, -3.0, 0.0, 0.0, 0.0, 0.0]];
         let mut column_names: HashMap<String, usize> = HashMap::new();
         column_names.insert("x1".to_string(), 0);
         column_names.insert("x2".to_string(), 1);
@@ -282,6 +278,10 @@ mod tests {
         column_names.insert("s2".to_string(), 3);
         column_names.insert("s3".to_string(), 4);
         column_names.insert("Value".to_string(), 5);
+        let table_rows = vec![vec![3.0, 6.0, 1.0, 0.0, 0.0, 90.0],
+                              vec![2.0, 1.0, 0.0, 1.0, 0.0, 35.0],
+                              vec![1.0, 1.0, 0.0, 0.0, 1.0, 20.0],
+                              vec![-2.5, -3.0, 0.0, 0.0, 0.0, 0.0]];
         let mut table = Table::new(column_names, table_rows);
         pivot_around(1, 0, &mut table);
         let table_rows = table.get_rows();
