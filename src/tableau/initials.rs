@@ -24,7 +24,7 @@ pub fn get_initial_table_from(fun: &Function, constraints: &SystemOfConstraints)
             &Constraint::NonNegative(_) => continue,
         }
     }
-    for var in fun.exp().borrow().lhs() {
+    for var in fun.exp_max().borrow().lhs() {
         let map_len = column_names.len();
         column_names.entry(var.name().to_string()).or_insert(map_len);
     }
