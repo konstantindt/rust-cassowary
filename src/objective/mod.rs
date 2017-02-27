@@ -29,6 +29,7 @@ mod tests {
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
         let f1 = Function::new(e1, ProblemType::MAX);
         let exp1 = f1.exp().borrow();
+        assert_eq!("Z", f1.name());
         assert_eq!(ProblemType::MAX, *f1.p_type());
         assert_eq!("Z", exp1.lhs()[0].name());
         assert_eq!(1.0, exp1.lhs()[0].get_data());
@@ -57,6 +58,7 @@ mod tests {
                             vec![new_var("x", 2.0), new_var("y", 3.0), new_const("bonus", 1000.0)]);
         let f2 = Function::new(e2, ProblemType::MIN);
         let exp2 = f2.exp().borrow();
+        assert_eq!("Z", f2.name());
         assert_eq!(ProblemType::MIN, *f2.p_type());
         assert_eq!("Z", exp2.lhs()[0].name());
         assert_eq!(1.0, exp2.lhs()[0].get_data());

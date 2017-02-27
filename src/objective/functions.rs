@@ -31,6 +31,16 @@ impl Function {
         &self.problem_type
     }
 
+    pub fn name(&self) -> String {
+        if self.problem_type == ProblemType::MAX {
+            let exp = self.expression.borrow();
+            let last_index = exp.lhs().len() - 1;
+            exp.lhs()[last_index].name().clone()
+        } else {
+            self.expression.borrow().lhs()[0].name().clone()
+        }
+    }
+
     pub fn exp_max(&self) -> &RefCell<Expression> {
         if let Some(ref exp_to_max) = self.expression_max {
             &exp_to_max
