@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 use objective::functions::Function;
-use objective::constraints::Constraint;
-use objective::constraints::SystemOfConstraints;
+use objective::constraints::{Constraint, SystemOfConstraints};
 use tableau::tables::Table;
 
 pub fn get_initial_table_from(fun: &Function, constraints: &SystemOfConstraints) -> Table {

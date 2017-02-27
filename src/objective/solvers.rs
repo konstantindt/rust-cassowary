@@ -3,8 +3,7 @@ use math::variables::{new_slack_var, new_surplus_var};
 use math::relationships::Relationship;
 use math::expressions::Expression;
 use objective::functions::Function;
-use objective::constraints::Constraint;
-use objective::constraints::SystemOfConstraints;
+use objective::constraints::{Constraint, SystemOfConstraints};
 
 pub fn transform_constraint_rels_to_eq(constraints: &SystemOfConstraints) {
     for i in 0..constraints.system().len() {

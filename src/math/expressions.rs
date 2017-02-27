@@ -1,7 +1,6 @@
 use std::mem;
 use std::result::Result;
-use math::variables::AbstVar;
-use math::variables::new_const;
+use math::variables::{AbstVar, new_const};
 use math::relationships::Relationship;
 
 pub struct Expression {
