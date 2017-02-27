@@ -52,7 +52,8 @@ impl Table {
                                            self.rows[one_entry_index][self.column_names.len() - 1];
                 // If the basic variable turns out negative that this solution
                 // is not feasable...
-                if basic_variable_value.is_sign_negative() {
+                if basic_variable_value.is_sign_negative() &&
+                   one_entry_index != self.rows.len() - 1 {
                     // ... report the row where it happened.
                     return Err((one_entry_index, i));
                 } else {
