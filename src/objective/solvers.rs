@@ -6,9 +6,9 @@ use objective::functions::Function;
 use objective::constraints::{Constraint, SystemOfConstraints};
 
 pub fn transform_constraint_rels_to_eq(constraints: &SystemOfConstraints) {
-    for i in 0..constraints.system().len() {
-        match constraints.system()[i] {
-            Constraint::Regular(ref ref_cell) => {
+    for (i, constraint) in constraints.system().iter().enumerate() {
+        match constraint {
+            &Constraint::Regular(ref ref_cell) => {
                 let mut exp = ref_cell.borrow_mut();
                 if *exp.rel() == Relationship::LEQ {
                     add_slack_var(exp.deref_mut(), i);
@@ -23,7 +23,7 @@ pub fn transform_constraint_rels_to_eq(constraints: &SystemOfConstraints) {
                     }
                 }
             }
-            Constraint::NonNegative(_) => continue,
+            &Constraint::NonNegative(_) => continue,
         };
     }
 }

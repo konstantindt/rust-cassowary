@@ -88,8 +88,8 @@ fn insert_side(side: &mut Vec<AbstVar>, var: AbstVar, start: bool) {
 }
 
 fn mul_side(side: &mut Vec<AbstVar>, by: f64) {
-    for i in 0..side.len() {
-        match &mut side[i] {
+    for var in side.iter_mut() {
+        match var {
             &mut AbstVar::Variable { ref mut coefficient, .. } => {
                 if *coefficient != 0.0 {
                     *coefficient = *coefficient * by;
