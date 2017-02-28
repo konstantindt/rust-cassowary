@@ -85,12 +85,7 @@ impl Table {
     }
 
     pub fn div_cell(&mut self, row_index: usize, colunm_index: usize, by: f32) {
-        //self.rows[row_index][colunm_index] = self.rows[row_index][colunm_index] / by;
-        self.rows[row_index][colunm_index] = ((self.rows[row_index][colunm_index] / by) * 1.0e+15).round() / 1.0e+15;
-        if self.rows[row_index][colunm_index] == -0.0 {
-            self.rows[row_index][colunm_index] = self.rows[row_index][colunm_index] * -1.0
-        }
-
+        self.rows[row_index][colunm_index] = self.rows[row_index][colunm_index] / by;
     }
 }
 

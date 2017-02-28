@@ -85,7 +85,7 @@ fn simplex_test_min_1() {
     assert!(solution.contains(&("m".to_string(), 0.5644002)));
     assert!(solution.contains(&("c".to_string(), 0.18481092)));
     assert!(solution.contains(&("p".to_string(), 0.14701743)));
-    assert!(solution.contains(&("f".to_string(), 0.49999994)));
+    assert!(solution.contains(&("f".to_string(), 0.5)));
     assert!(solution.contains(&("y".to_string(), 0.0)));
     assert!(solution.contains(&("sl1".to_string(), 0.0)));
     assert!(solution.contains(&("su2".to_string(), 0.0)));
