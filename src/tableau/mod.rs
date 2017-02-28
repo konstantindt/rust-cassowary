@@ -44,6 +44,52 @@ mod tests {
     }
 
     #[test]
+    fn can_sub_cell() {
+        let mut column_names: HashMap<String, usize> = HashMap::new();
+        column_names.insert("x".to_string(), 0);
+        column_names.insert("y".to_string(), 1);
+        let rows = vec![vec![1.0, 2.0], vec![3.0, 4.0], vec![5.0, 6.0]];
+        let mut table = Table::new(column_names, rows);
+        table.sub_cell(1, 1, 2.0);
+        let table_header = table.get_column_names();
+        let table_rows = table.get_rows();
+        assert!(table_header.contains_key("x"));
+        assert!(table_header.contains_key("y"));
+        assert_eq!(2, table_header.len());
+        assert_eq!(0, *table_header.get("x").unwrap());
+        assert_eq!(1, *table_header.get("y").unwrap());
+        assert_eq!(1.0, table_rows[0][0]);
+        assert_eq!(2.0, table_rows[0][1]);
+        assert_eq!(3.0, table_rows[1][0]);
+        assert_eq!(2.0, table_rows[1][1]);
+        assert_eq!(5.0, table_rows[2][0]);
+        assert_eq!(6.0, table_rows[2][1]);
+    }
+
+    #[test]
+    fn can_div_cell() {
+        let mut column_names: HashMap<String, usize> = HashMap::new();
+        column_names.insert("x".to_string(), 0);
+        column_names.insert("y".to_string(), 1);
+        let rows = vec![vec![1.0, 2.0], vec![3.0, 4.0], vec![5.0, 6.0]];
+        let mut table = Table::new(column_names, rows);
+        table.div_cell(2, 1, 2.0);
+        let table_header = table.get_column_names();
+        let table_rows = table.get_rows();
+        assert!(table_header.contains_key("x"));
+        assert!(table_header.contains_key("y"));
+        assert_eq!(2, table_header.len());
+        assert_eq!(0, *table_header.get("x").unwrap());
+        assert_eq!(1, *table_header.get("y").unwrap());
+        assert_eq!(1.0, table_rows[0][0]);
+        assert_eq!(2.0, table_rows[0][1]);
+        assert_eq!(3.0, table_rows[1][0]);
+        assert_eq!(4.0, table_rows[1][1]);
+        assert_eq!(5.0, table_rows[2][0]);
+        assert_eq!(3.0, table_rows[2][1]);
+    }
+
+    #[test]
     fn can_get_basic_solution() {
         let mut column_names1: HashMap<String, usize> = HashMap::new();
         column_names1.insert("P".to_string(), 0);
