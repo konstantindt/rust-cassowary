@@ -2,5 +2,10 @@
 name = "cassowary"
 version = "0.1.0"
 authors = ["Konstantin Terziev <kd.terziev@gmail.com>"]
+description = "The Cassowary constraint solver algorithm written in the Rust Programming Language."
+repository = "https://github.com/MrKonstantinT/rust-cassowary"
+readme = "README.md"
+keywords = ["cassowary", "solver", "layouts"]
+license = "MIT"
 
 [dependencies]
