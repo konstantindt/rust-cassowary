@@ -11,7 +11,7 @@ use tableau::enter_vars::{enter_var_pivot_optimal, enter_var_pivot_feasible};
 use tableau::leave_vars::leave_var;
 use tableau::pivots::pivot_around;
 
-type Num = f32;
+pub type Num = f32;
 
 pub fn optimise(function: &mut Function, constraints: &SystemOfConstraints) -> Vec<(String, Num)> {
     rearrange_fun_eq_zero(function);
