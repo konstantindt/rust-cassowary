@@ -1,13 +1,14 @@
 use std::collections::HashMap;
 use std::result::Result;
+use Num;
 
 pub struct Table {
     column_names: HashMap<String, usize>, // assume last column reserved
-    rows: Vec<Vec<f32>>,
+    rows: Vec<Vec<Num>>,
 }
 
 impl Table {
-    pub fn new(c_n: HashMap<String, usize>, r: Vec<Vec<f32>>) -> Table {
+    pub fn new(c_n: HashMap<String, usize>, r: Vec<Vec<Num>>) -> Table {
         Table {
             rows: r,
             column_names: c_n,
@@ -18,14 +19,13 @@ impl Table {
         &self.column_names
     }
 
-    pub fn get_rows(&self) -> &Vec<Vec<f32>> {
+    pub fn get_rows(&self) -> &Vec<Vec<Num>> {
         &self.rows
     }
 
-    pub fn get_basic_solution(&self) -> Result<Vec<(String, f32)>, (usize, usize)> {
+    pub fn get_basic_solution(&self) -> Result<Vec<(String, Num)>, (usize, usize)> {
         let mut basic_solution = Vec::with_capacity(self.column_names.len());
         // Note: ignore RHS column.
-        println!("Bye");
         'columns: for i in 0..self.column_names.len() - 1 {
             let mut one_entry_index = 0;
             let mut matched_one = false;
@@ -51,7 +51,6 @@ impl Table {
             if matched_one {
                 let basic_variable_value = self.rows[one_entry_index][i] *
                                            self.rows[one_entry_index][self.column_names.len() - 1];
-                println!("{}, x = {},{},{}", basic_variable_value, self.rows[0][0], self.rows[1][0], self.rows[2][0]);
                 // If the basic variable turns out negative that this solution
                 // is not feasable...
                 if basic_variable_value.is_sign_negative() &&
@@ -80,11 +79,11 @@ impl Table {
         true
     }
 
-    pub fn sub_cell(&mut self, row_index: usize, colunm_index: usize, by: f32) {
+    pub fn sub_cell(&mut self, row_index: usize, colunm_index: usize, by: Num) {
         self.rows[row_index][colunm_index] = self.rows[row_index][colunm_index] - by;
     }
 
-    pub fn div_cell(&mut self, row_index: usize, colunm_index: usize, by: f32) {
+    pub fn div_cell(&mut self, row_index: usize, colunm_index: usize, by: Num) {
         self.rows[row_index][colunm_index] = self.rows[row_index][colunm_index] / by;
     }
 }

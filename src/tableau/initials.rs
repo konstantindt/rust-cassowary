@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use Num;
 use objective::functions::Function;
 use objective::constraints::{Constraint, SystemOfConstraints};
 use tableau::tables::Table;
@@ -30,7 +31,7 @@ pub fn get_initial_table_from(fun: &Function, constraints: &SystemOfConstraints)
     // ... and don't forget about the constant on the right.
     let map_len = column_names.len();
     column_names.insert("RHS".to_string(), map_len);
-    let mut rows: Vec<Vec<f32>> = vec![vec![0.0; column_names.len()]; num_rows];
+    let mut rows: Vec<Vec<Num>> = vec![vec![0.0; column_names.len()]; num_rows];
     // Populate the table
     let mut row_index = 0;
     for constraint in constraints.system() {

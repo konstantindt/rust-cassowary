@@ -1,5 +1,6 @@
 use std::mem;
 use std::result::Result;
+use Num;
 use math::variables::{AbstVar, new_const};
 use math::relationships::Relationship;
 
@@ -47,7 +48,7 @@ impl Expression {
         insert_side(&mut self.right_hand_side, to_move, insert_at_start);
     }
 
-    pub fn mul_both_sides(&mut self, by: f32) {
+    pub fn mul_both_sides(&mut self, by: Num) {
         mul_side(&mut self.left_hand_side, by);
         mul_side(&mut self.right_hand_side, by);
 
@@ -87,7 +88,7 @@ fn insert_side(side: &mut Vec<AbstVar>, var: AbstVar, start: bool) {
     }
 }
 
-fn mul_side(side: &mut Vec<AbstVar>, by: f32) {
+fn mul_side(side: &mut Vec<AbstVar>, by: Num) {
     for var in side.iter_mut() {
         match var {
             &mut AbstVar::Variable { ref mut coefficient, .. } => *coefficient = *coefficient * by,
