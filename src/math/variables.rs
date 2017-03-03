@@ -1,9 +1,10 @@
 use std::hash::{Hash, Hasher};
+use Num;
 
 #[derive(Debug, Clone)]
 pub enum AbstVar {
-    Variable { name: String, coefficient: f32 },
-    Constant { name: String, value: f32 },
+    Variable { name: String, coefficient: Num },
+    Constant { name: String, value: Num },
     SlackVar { name: String },
     SurplusVar { name: String },
 }
@@ -41,7 +42,7 @@ impl AbstVar {
         }
     }
 
-    pub fn get_data(&self) -> f32 {
+    pub fn get_data(&self) -> Num {
         match self {
             &AbstVar::Variable { ref coefficient, .. } => *coefficient,
             &AbstVar::Constant { ref value, .. } => *value,
@@ -50,7 +51,7 @@ impl AbstVar {
         }
     }
 
-    pub fn set_data(&mut self, d: f32) {
+    pub fn set_data(&mut self, d: Num) {
         match self {
             &mut AbstVar::Variable { ref mut coefficient, .. } => *coefficient = d,
             &mut AbstVar::Constant { ref mut value, .. } => *value = d,
@@ -67,14 +68,14 @@ impl AbstVar {
     }
 }
 
-pub fn new_var(n: &str, c: f32) -> AbstVar {
+pub fn new_var(n: &str, c: Num) -> AbstVar {
     AbstVar::Variable {
         name: n.to_string(),
         coefficient: c,
     }
 }
 
-pub fn new_const(n: &str, v: f32) -> AbstVar {
+pub fn new_const(n: &str, v: Num) -> AbstVar {
     AbstVar::Constant {
         name: n.to_string(),
         value: v,
