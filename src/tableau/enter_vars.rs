@@ -1,4 +1,3 @@
-use std::result::Result;
 use tableau::tables::Table;
 
 pub fn enter_var_pivot_optimal(table: &Table) -> usize {
@@ -17,13 +16,13 @@ pub fn enter_var_pivot_optimal(table: &Table) -> usize {
 pub fn enter_var_pivot_feasible(table: &Table,
                                 row: usize,
                                 begin_column: usize)
-                                -> Result<usize, &str> {
+                                -> Option<usize> {
     let table_rows = table.get_rows();
     // Select the positive cell furthest to the left.
     for i in 0..begin_column {
         if table_rows[row][i].is_sign_positive() && table_rows[row][i] > 0.0 {
-            return Ok(i);
+            return Some(i);
         }
     }
-    Err("Could not find a single positive entry up to the column reported.")
+    None
 }

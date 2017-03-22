@@ -6,6 +6,10 @@ description = "The Cassowary constraint solver algorithm written in the Rust Pro
 repository = "https://github.com/MrKonstantinT/rust-cassowary"
 readme = "README.md"
 keywords = ["cassowary", "solver", "layouts"]
+categories = ["algorithms"]
 license = "MIT"
+
+[badges]
+travis-ci = { repository = "MrKonstantinT/rust-cassowary" }
 
 [dependencies]

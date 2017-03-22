@@ -9,17 +9,21 @@ pub fn leave_var(enter_var_index: usize, table: &Table) -> usize {
     let mut ratio_current = table_rows[row_index][last_column_index] /
                             table_rows[row_index][enter_var_index];
     let mut i = 1;
-    while i < table_rows.len() - 1 { // Only consider rows with non-basic variables.
+    // Do not consider RHS of the function rows as we do not pivot on it.
+    'down_columns: while i < table_rows.len() - table.get_num_fun_rows() {
         if ratio_current.is_sign_negative() {
             row_index = row_index + 1;
             ratio_current = table_rows[row_index][last_column_index] /
                             table_rows[row_index][enter_var_index];
-            continue;
+            continue 'down_columns;
         }
         // Find the next positive ratio
         let mut ratio_next = table_rows[i][last_column_index] / table_rows[i][enter_var_index];
         while ratio_next.is_sign_negative() {
             i = i + 1;
+            if i > table_rows.len() - table.get_num_fun_rows() {
+                break 'down_columns;
+            }
             ratio_next = table_rows[i][last_column_index] / table_rows[i][enter_var_index];
         }
         if ratio_next < ratio_current {

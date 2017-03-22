@@ -104,12 +104,9 @@ mod tests {
                                vec![0.0, 0.0, 0.0, 1.0 / 3.0, 1.0, -3.0, 5.0],
                                vec![0.0, 1.0, 0.0, -1.0 / 3.0, 0.0, 0.5, 10.0]];
         let table1 = Table::new(column_names1, table1_rows);
-        assert_eq!(vec![("P".to_string(), 0.0),
-                        ("x".to_string(), 10.0),
+        assert_eq!(vec![("x".to_string(), 10.0),
                         ("y".to_string(), 10.0),
-                        ("s".to_string(), 0.0),
-                        ("t".to_string(), 5.0),
-                        ("u".to_string(), 0.0)],
+                        ("t".to_string(), 5.0)],
                    table1.get_basic_solution().unwrap());
 
         let mut column_names2: HashMap<String, usize> = HashMap::new();
@@ -265,7 +262,7 @@ mod tests {
                                vec![-1.0, 0.0, -4.0, 0.0, 1.0, 60.0],
                                vec![-14.0, -6.0, -13.0, 0.0, 0.0, 0.0]];
         let table2 = Table::new(column_names2, table2_rows);
-        assert_eq!(true, enter_var_pivot_feasible(&table2, 1, 4).is_err());
+        assert_eq!(true, enter_var_pivot_feasible(&table2, 1, 4).is_none());
     }
 
     #[test]
