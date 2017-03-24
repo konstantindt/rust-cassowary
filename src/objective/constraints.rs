@@ -1,9 +1,8 @@
-use std::cell::RefCell;
 use math::variables::AbstVar;
 use math::expressions::Expression;
 
 pub enum Constraint {
-    Regular(RefCell<Expression>),
+    Regular(Expression),
     NonNegative(AbstVar),
 }
 
@@ -19,10 +18,14 @@ impl SystemOfConstraints {
     pub fn system(&self) -> &Vec<Constraint> {
         &self.constraints
     }
+
+    pub fn system_mut(&mut self) -> &mut Vec<Constraint> {
+        &mut self.constraints
+    }
 }
 
 pub fn new_reg_con(exp: Expression) -> Constraint {
-    Constraint::Regular(RefCell::new(exp))
+    Constraint::Regular(exp)
 }
 
 pub fn new_non_neg_con(var: AbstVar) -> Constraint {

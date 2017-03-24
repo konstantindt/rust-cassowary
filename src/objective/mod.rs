@@ -89,8 +89,7 @@ mod tests {
                                   vec![new_const("volume", 2300.0)]);
         let c1 = new_reg_con(exp);
         match c1 {
-            Constraint::Regular(ref_cell) => {
-                let exp = ref_cell.borrow();
+            Constraint::Regular(exp) => {
                 assert_eq!("x", exp.lhs()[0].name());
                 assert_eq!(2.0, exp.lhs()[0].get_data());
                 assert_eq!(Relationship::LEQ, *exp.rel());
@@ -122,8 +121,7 @@ mod tests {
         let s = SystemOfConstraints::new(vec![c1, c2]);
         for constraint in s.system() {
             match constraint {
-                &Constraint::Regular(ref ref_cell) => {
-                    let exp = ref_cell.borrow();
+                &Constraint::Regular(ref exp) => {
                     assert_eq!("x", exp.lhs()[0].name());
                     assert_eq!(2.0, exp.lhs()[0].get_data());
                     assert_eq!(Relationship::LEQ, *exp.rel());
@@ -159,8 +157,8 @@ mod tests {
         let c3 = new_reg_con(exp3);
         let c4 = new_reg_con(exp4);
         let c5 = new_non_neg_con(new_var("x", 2.0));
-        let s = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
-        let fun = transform_constraint_rels_to_eq(&s).unwrap();
+        let mut s = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
+        let fun = transform_constraint_rels_to_eq(&mut s).unwrap();
         assert_eq!("Expression { \
                    lhs: [Variable { name: \"W\", coefficient: 1 }], \
                    rel: EQ, \
@@ -169,8 +167,7 @@ mod tests {
                          Constant { name: \"RHS\", value: -500 }] }",
                    format!("{:?}", fun.exp_max().borrow()));
         match s.system()[0] {
-            Constraint::Regular(ref ref_cell) => {
-                let exp = ref_cell.borrow();
+            Constraint::Regular(ref exp) => {
                 assert_eq!("x", exp.lhs()[0].name());
                 assert_eq!(2.0, exp.lhs()[0].get_data());
                 assert_eq!(Relationship::EQ, *exp.rel());
@@ -183,8 +180,7 @@ mod tests {
             _ => panic!("Unexpected variant in this program logic."),
         };
         match s.system()[1] {
-            Constraint::Regular(ref ref_cell) => {
-                let exp = ref_cell.borrow();
+            Constraint::Regular(ref exp) => {
                 assert_eq!("w", exp.lhs()[0].name());
                 assert_eq!(6.0, exp.lhs()[0].get_data());
                 assert_eq!(Relationship::EQ, *exp.rel());
@@ -198,8 +194,7 @@ mod tests {
             _ => panic!("Unexpected variant in this program logic."),
         };
         match s.system()[2] {
-            Constraint::Regular(ref ref_cell) => {
-                let exp = ref_cell.borrow();
+            Constraint::Regular(ref exp) => {
                 assert_eq!("u", exp.lhs()[0].name());
                 assert_eq!(-61.0, exp.lhs()[0].get_data());
                 assert_eq!(Relationship::EQ, *exp.rel());
@@ -212,8 +207,7 @@ mod tests {
             _ => panic!("Unexpected variant in this program logic."),
         };
         match s.system()[3] {
-            Constraint::Regular(ref ref_cell) => {
-                let exp = ref_cell.borrow();
+            Constraint::Regular(ref exp) => {
                 assert_eq!("k", exp.lhs()[0].name());
                 assert_eq!(101.0, exp.lhs()[0].get_data());
                 assert_eq!(Relationship::EQ, *exp.rel());

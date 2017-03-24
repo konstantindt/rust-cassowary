@@ -7,13 +7,12 @@ pub mod pivots;
 #[cfg(test)]
 mod tests {
     use std::collections::HashMap;
-    use std::cell::RefCell;
     use math::variables::{new_var, new_const};
     use math::relationships::Relationship;
     use math::expressions::Expression;
     use objective::problems::ProblemType;
     use objective::functions::Function;
-    use objective::constraints::{Constraint, SystemOfConstraints};
+    use objective::constraints::{SystemOfConstraints, new_reg_con, new_non_neg_con};
     use objective::solvers::{transform_constraint_rels_to_eq, rearrange_fun_eq_zero};
     use tableau::tables::Table;
     use tableau::initials::get_initial_table_from;
@@ -104,9 +103,7 @@ mod tests {
                                vec![0.0, 0.0, 0.0, 1.0 / 3.0, 1.0, -3.0, 5.0],
                                vec![0.0, 1.0, 0.0, -1.0 / 3.0, 0.0, 0.5, 10.0]];
         let table1 = Table::new(column_names1, table1_rows);
-        assert_eq!(vec![("x".to_string(), 10.0),
-                        ("y".to_string(), 10.0),
-                        ("t".to_string(), 5.0)],
+        assert_eq!(vec![("x".to_string(), 10.0), ("y".to_string(), 10.0), ("t".to_string(), 5.0)],
                    table1.get_basic_solution().unwrap());
 
         let mut column_names2: HashMap<String, usize> = HashMap::new();
@@ -187,13 +184,13 @@ mod tests {
         let e3 = Expression::new(vec![new_var("x1", 1.0), new_var("x2", 2.0), new_var("x3", 4.0)],
                                  Relationship::LEQ,
                                  vec![new_const("Woodworking (days)", 60.0)]);
-        let c1 = Constraint::Regular(RefCell::new(e2));
-        let c2 = Constraint::Regular(RefCell::new(e3));
-        let c3 = Constraint::NonNegative(new_var("x1", 1.0));
-        let c4 = Constraint::NonNegative(new_var("x2", 1.0));
-        let c5 = Constraint::NonNegative(new_var("x3", 1.0));
-        let system = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
-        transform_constraint_rels_to_eq(&system);
+        let c1 = new_reg_con(e2);
+        let c2 = new_reg_con(e3);
+        let c3 = new_non_neg_con(new_var("x1", 1.0));
+        let c4 = new_non_neg_con(new_var("x2", 1.0));
+        let c5 = new_non_neg_con(new_var("x3", 1.0));
+        let mut system = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
+        transform_constraint_rels_to_eq(&mut system);
         let table = get_initial_table_from(&f, &system);
         let table_header = table.get_column_names();
         let table_rows = table.get_rows();

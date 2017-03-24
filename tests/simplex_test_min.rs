@@ -76,9 +76,9 @@ fn simplex_test_min_1() {
     let c10 = new_non_neg_con(new_var("p", 1.0));
     let c11 = new_non_neg_con(new_var("f", 1.0));
     let c12 = new_non_neg_con(new_var("y", 1.0));
-    let subject_to = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11,
-                                                   c12]);
-    let solution = cassowary::optimise(&mut objective_func, &subject_to);
+    let mut subject_to = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5, c6, c7, c8, c9, c10,
+                                                       c11, c12]);
+    let solution = cassowary::optimise(&mut objective_func, &mut subject_to);
     assert_eq!(7, solution.len());
     assert!(solution.contains(&("C".to_string(), 9.174414)));
     assert!(solution.contains(&("m".to_string(), 0.5644002)));
@@ -106,8 +106,8 @@ fn simplex_test_min_2() {
     let c3 = new_non_neg_con(new_var("x", 1.0));
     let c4 = new_non_neg_con(new_var("y", 1.0));
     let c5 = new_non_neg_con(new_var("z", 1.0));
-    let subject_to = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
-    let solution = cassowary::optimise(&mut objective_func, &subject_to);
+    let mut subject_to = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
+    let solution = cassowary::optimise(&mut objective_func, &mut subject_to);
     assert_eq!(3, solution.len());
     assert!(solution.contains(&("P".to_string(), -38.0 / 3.0)));
     assert!(solution.contains(&("y".to_string(), 7.0 / 3.0)));
@@ -131,8 +131,8 @@ fn simplex_test_min_3() {
     let c3 = new_non_neg_con(new_var("y1", 1.0));
     let c4 = new_non_neg_con(new_var("y2", 1.0));
     let c5 = new_non_neg_con(new_var("y3", 1.0));
-    let subject_to = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
-    let solution = cassowary::optimise(&mut objective_func, &subject_to);
+    let mut subject_to = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
+    let solution = cassowary::optimise(&mut objective_func, &mut subject_to);
     assert_eq!(3, solution.len());
     assert!(solution.contains(&("W".to_string(), 20.0)));
     assert!(solution.contains(&("y2".to_string(), 10.0)));
@@ -155,8 +155,8 @@ fn simplex_test_min_4() {
     let c2 = new_reg_con(exp3);
     let c3 = new_non_neg_con(new_var("x1", 1.0));
     let c4 = new_non_neg_con(new_var("x2", 1.0));
-    let subject_to = SystemOfConstraints::new(vec![c1, c2, c3, c4]);
-    let solution = cassowary::optimise(&mut objective_func, &subject_to);
+    let mut subject_to = SystemOfConstraints::new(vec![c1, c2, c3, c4]);
+    let solution = cassowary::optimise(&mut objective_func, &mut subject_to);
     assert_eq!(3, solution.len());
     assert!(solution.contains(&("C".to_string(), 24.0)));
     assert!(solution.contains(&("x1".to_string(), 8.0)));
@@ -190,8 +190,8 @@ fn simplex_test_min_5() {
     let c3 = new_reg_con(exp4);
     let c4 = new_non_neg_con(new_var("x1", 1.0));
     let c5 = new_non_neg_con(new_var("x2", 1.0));
-    let subject_to = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
-    let solution = cassowary::optimise(&mut objective_func, &subject_to);
+    let mut subject_to = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
+    let solution = cassowary::optimise(&mut objective_func, &mut subject_to);
     assert_eq!(4, solution.len());
     assert!(solution.contains(&("Z".to_string(), 25.0)));
     assert!(solution.contains(&("x1".to_string(), 5.0)));
@@ -219,8 +219,8 @@ fn simplex_test_min_6() {
     let c3 = new_reg_con(exp4);
     let c4 = new_non_neg_con(new_var("x1", 1.0));
     let c5 = new_non_neg_con(new_var("x2", 1.0));
-    let subject_to = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
-    let solution = cassowary::optimise(&mut objective_func, &subject_to);
+    let mut subject_to = SystemOfConstraints::new(vec![c1, c2, c3, c4, c5]);
+    let solution = cassowary::optimise(&mut objective_func, &mut subject_to);
     assert_eq!(4, solution.len());
     assert!(solution.contains(&("Z".to_string(), 23.0 / 7.0)));
     assert!(solution.contains(&("x1".to_string(), 5.0 / 7.0)));
