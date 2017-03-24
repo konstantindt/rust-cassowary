@@ -108,9 +108,9 @@ mod tests {
         assert_eq!(3.0, exp1.lhs()[0].get_data());
         assert_eq!("w", exp1.lhs()[1].name());
         assert_eq!(9.0, exp1.lhs()[1].get_data());
-        assert_eq!("weight", exp1.lhs()[2].name());
-        assert_eq!(700.0, exp1.lhs()[2].get_data());
-        assert_eq!("s1", exp1.lhs()[3].name());
+        assert_eq!("s1", exp1.lhs()[2].name());
+        assert_eq!("weight", exp1.lhs()[3].name());
+        assert_eq!(700.0, exp1.lhs()[3].get_data());
         assert_eq!(Relationship::EQ, *exp1.rel());
         assert_eq!("x", exp1.rhs()[0].name());
         assert_eq!(2.0, exp1.rhs()[0].get_data());
@@ -134,13 +134,13 @@ mod tests {
         assert_eq!(2.0, exp2.rhs()[0].get_data());
         assert_eq!("y", exp2.rhs()[1].name());
         assert_eq!(3.0, exp2.rhs()[1].get_data());
-        assert_eq!("bonus", exp2.rhs()[2].name());
-        assert_eq!(1500.0, exp2.rhs()[2].get_data());
-        assert_eq!("w", exp2.rhs()[3].name());
-        assert_eq!(9.0, exp2.rhs()[3].get_data());
+        assert_eq!("w", exp2.rhs()[2].name());
+        assert_eq!(9.0, exp2.rhs()[2].get_data());
+        assert_eq!("s1", exp2.rhs()[3].name());
         assert_eq!("weight", exp2.rhs()[4].name());
         assert_eq!(700.0, exp2.rhs()[4].get_data());
-        assert_eq!("s1", exp2.rhs()[5].name());
+        assert_eq!("bonus", exp2.rhs()[5].name());
+        assert_eq!(1500.0, exp2.rhs()[5].get_data());
     }
 
     #[test]

@@ -37,11 +37,11 @@ impl Expression {
     }
 
     pub fn add_lhs(&mut self, to_add: AbstVar) {
-        add_side(&mut self.left_hand_side, to_add);
+        insert_side(&mut self.left_hand_side, to_add, false);
     }
 
     pub fn add_rhs(&mut self, to_add: AbstVar) {
-        add_side(&mut self.right_hand_side, to_add);
+        insert_side(&mut self.right_hand_side, to_add, false);
     }
 
     pub fn move_from_lhs_side(&mut self, index: usize, insert_at_start: bool) {
@@ -87,12 +87,6 @@ impl fmt::Debug for Expression {
     }
 }
 
-fn add_side(side: &mut Vec<AbstVar>, to_add: AbstVar) {
-    if let Some(new_var) = collect_into_existing(side, to_add) {
-        side.push(new_var);
-    }
-}
-
 fn collect_into_existing(side: &mut Vec<AbstVar>, to_add: AbstVar) -> Option<AbstVar> {
     for mut var in side.iter_mut() {
         if var == &to_add {
@@ -116,10 +110,13 @@ fn insert_side(side: &mut Vec<AbstVar>, var: AbstVar, start: bool) {
             while insert_at < side.len() {
                 match &side[insert_at] {
                     &AbstVar::Variable { .. } => insert_at += 1,
-                    _ => break,
+                    _ => {
+                        side.insert(insert_at, to_insert);
+                        return;
+                    }
                 };
             }
-            side.insert(insert_at, to_insert);
+            side.push(to_insert);
         }
     }
 }
