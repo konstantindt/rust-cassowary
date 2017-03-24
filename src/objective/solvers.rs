@@ -5,12 +5,11 @@ use objective::functions::Function;
 use objective::problems::ProblemType;
 use objective::constraints::{Constraint, SystemOfConstraints};
 
-pub fn transform_constraint_rels_to_eq(constraints: &SystemOfConstraints) -> Option<Function> {
+pub fn transform_constraint_rels_to_eq(constraints: &mut SystemOfConstraints) -> Option<Function> {
     let mut phase1: Option<Expression> = None;
-    for (i, constraint) in constraints.system().iter().enumerate() {
+    for (i, constraint) in constraints.system_mut().iter_mut().enumerate() {
         match constraint {
-            &Constraint::Regular(ref ref_cell) => {
-                let mut exp = ref_cell.borrow_mut();
+            &mut Constraint::Regular(ref mut exp) => {
                 if exp.rhs()[0].get_data().is_sign_negative() {
                     // Negative constants on the right hand side are not allowed.
                     exp.mul_both_sides(-1.0);
@@ -45,7 +44,7 @@ pub fn transform_constraint_rels_to_eq(constraints: &SystemOfConstraints) -> Opt
                     }
                 }
             }
-            &Constraint::NonNegative(_) => continue,
+            _ => continue,
         };
     }
     if let Some(phase1_fun_exp) = phase1 {

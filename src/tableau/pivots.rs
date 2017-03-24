@@ -41,8 +41,7 @@ pub fn apply_transition_rule(a_v_i_s: Vec<(String, Num)>,
         let arti_var_row = table.get_row_of_basic_var(&basic_arti_var.0);
         for constraint in regular_constraints {
             match constraint {
-                &Constraint::Regular(ref ref_cell) => {
-                    let exp = ref_cell.borrow();
+                &Constraint::Regular(ref exp) => {
                     for var in exp.lhs() {
                         // Pivot on non artificial variable with coefficient not 0.
                         match var {

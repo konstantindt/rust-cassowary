@@ -15,7 +15,9 @@ use tableau::pivots::{pivot_around, apply_transition_rule};
 
 pub type Num = f32;
 
-pub fn optimise(function: &mut Function, constraints: &SystemOfConstraints) -> Vec<(String, Num)> {
+pub fn optimise(function: &mut Function,
+                constraints: &mut SystemOfConstraints)
+                -> Vec<(String, Num)> {
     rearrange_fun_eq_zero(function);
     if let Some(mut phase1_fun) = transform_constraint_rels_to_eq(constraints) {
         rearrange_fun_eq_zero(&mut phase1_fun);

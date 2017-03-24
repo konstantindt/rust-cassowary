@@ -13,9 +13,8 @@ pub fn get_initial_table_from(fun: &Function, constraints: &SystemOfConstraints)
     // with respect to a variable name.
     for constraint in constraints.system() {
         match constraint {
-            &Constraint::Regular(ref ref_cell) => {
+            &Constraint::Regular(ref exp) => {
                 num_rows += 1;
-                let exp = ref_cell.borrow();
                 for var in exp.lhs() {
                     insert_column_name_not_present(var.name().to_string(), &mut column_names);
                 }
@@ -35,8 +34,7 @@ pub fn get_initial_table_from(fun: &Function, constraints: &SystemOfConstraints)
     let mut row_index = 0;
     for constraint in constraints.system() {
         match constraint {
-            &Constraint::Regular(ref ref_cell) => {
-                let exp = ref_cell.borrow();
+            &Constraint::Regular(ref exp) => {
                 for var in exp.lhs() {
                     rows[row_index]
                         [*column_names.get(var.name())
