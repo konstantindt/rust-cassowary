@@ -56,7 +56,7 @@ pub fn transform_constraint_rels_to_eq(constraints: &SystemOfConstraints) -> Opt
 }
 
 pub fn rearrange_fun_eq_zero(function: &mut Function) {
-    let mut exp = function.exp_max().borrow_mut();
+    let mut exp = function.exp_max_mut();
     exp.move_from_lhs_side(0, false);
     exp.swap_sides().unwrap();
     // Move the constant on the other side if present.

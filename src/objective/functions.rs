@@ -1,29 +1,30 @@
-use std::cell::RefCell;
 use math::variables::new_var;
 use math::relationships::Relationship;
 use math::expressions::Expression;
 use objective::problems::ProblemType;
 
 pub struct Function {
-    expression: RefCell<Expression>,
+    expression: Expression,
     problem_type: ProblemType,
-    expression_max: Option<RefCell<Expression>>,
+    expression_max: Option<Expression>,
 }
 
 impl Function {
     pub fn new(e: Expression, p_t: ProblemType) -> Function {
-        let mut e_m = None;
-        if p_t == ProblemType::MIN {
-            e_m = Some(RefCell::new(create_expression_to_max(&e)));
-        }
+        // Covert minimisation problems to maximasation so we can keep the Simplex in one form
+        // (Maximasation Form).
+        let e_m = match p_t {
+            ProblemType::MAX => None,
+            ProblemType::MIN => Some(create_expression_to_max(&e)),
+        };
         Function {
-            expression: RefCell::new(e),
+            expression: e,
             problem_type: p_t,
             expression_max: e_m,
         }
     }
 
-    pub fn exp(&self) -> &RefCell<Expression> {
+    pub fn exp(&self) -> &Expression {
         &self.expression
     }
 
@@ -33,19 +34,26 @@ impl Function {
 
     pub fn name(&self) -> String {
         if self.problem_type == ProblemType::MAX {
-            let exp = self.expression.borrow();
-            let last_index = exp.lhs().len() - 1;
-            exp.lhs()[last_index].name().clone()
+            let last_index = self.expression.lhs().len() - 1;
+            self.expression.lhs()[last_index].name().clone()
         } else {
-            self.expression.borrow().lhs()[0].name().clone()
+            self.expression.lhs()[0].name().clone()
         }
     }
 
-    pub fn exp_max(&self) -> &RefCell<Expression> {
+    pub fn exp_max(&self) -> &Expression {
         if let Some(ref exp_to_max) = self.expression_max {
             &exp_to_max
         } else {
             &self.expression
+        }
+    }
+
+    pub fn exp_max_mut(&mut self) -> &mut Expression {
+        if let Some(ref mut exp_to_max) = self.expression_max {
+            exp_to_max
+        } else {
+            &mut self.expression
         }
     }
 }
