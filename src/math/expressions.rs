@@ -5,6 +5,7 @@ use Num;
 use math::variables::{AbstVar, new_const};
 use math::relationships::Relationship;
 
+#[derive(Clone)]
 pub struct Expression {
     left_hand_side: Vec<AbstVar>,
     relationship: Relationship,

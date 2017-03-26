@@ -1,6 +1,7 @@
 use math::variables::AbstVar;
 use math::expressions::Expression;
 
+#[derive(Clone)]
 pub enum Constraint {
     Regular(Expression),
     NonNegative(AbstVar),
