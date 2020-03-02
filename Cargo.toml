@@ -3,13 +3,13 @@ name = "cassowary"
 version = "0.1.0"
 authors = ["Konstantin Terziev <kd.terziev@gmail.com>"]
 description = "The Cassowary constraint solver algorithm written in the Rust Programming Language."
-repository = "https://github.com/MrKonstantinT/rust-cassowary"
+repository = "https://github.com/konstantindt/rust-cassowary"
 readme = "README.md"
 keywords = ["cassowary", "solver", "layouts"]
 categories = ["algorithms"]
 license = "MIT"
 
 [badges]
-travis-ci = { repository = "MrKonstantinT/rust-cassowary" }
+travis-ci = { repository = "konstantindt/rust-cassowary" }
 
 [dependencies]

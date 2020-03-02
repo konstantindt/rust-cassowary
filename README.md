@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/MrKonstantinT/rust-cassowary.svg?branch=master)](https://travis-ci.org/MrKonstantinT/rust-cassowary)
+[![Build Status](https://travis-ci.org/konstantindt/rust-cassowary.svg?branch=master)](https://travis-ci.org/konstantindt/rust-cassowary)
 # About
 This library project is a Rust implementaion of the [Cassowary](https://constraints.cs.washington.edu/solvers/cassowary-tochi.pdf) constraints solver algorithm.
 
